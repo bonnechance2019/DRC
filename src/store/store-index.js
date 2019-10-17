@@ -376,8 +376,7 @@ const state = {
     ],
     search: '', //開發預設
     searchType: '',
-    select: '',
-
+    select: ''
 }
 
 const mutations = {
@@ -404,6 +403,12 @@ const mutations = {
     },
     addRecipe(state, payload) {
         state.recipe.push(payload)
+    },
+    addDishPhoto(state, url) {
+        state.dish[state.dish.length-1].dish_photo = url
+    },
+    addRecipePhoto(state, url) {
+        state.recipe[state.recipe.length-1].photo = url
     }
 }
 
@@ -435,6 +440,14 @@ const actions = {
         let payload = recipe
         payload.id = id
         commit('addRecipe', payload)
+    },
+    addDownloadURL({commit}, photo) {
+        if (photo.type == 'dishs') {
+            commit('addDishPhoto', photo.url)
+        }
+        else if (photo.type == 'recipes') {
+            commit('addRecipePhoto', photo.url)
+        }
     }
 }
 

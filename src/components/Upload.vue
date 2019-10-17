@@ -8,43 +8,44 @@ import { mapActions } from 'vuex';
 export default {
   name: 'myloader',
   mixins: [QUploaderBase],
-  props: ['url', 'name'],
   data() {
     return {
       photo: {
-        url: this.url,
-        name: this.name
+        type: '',
+        url: ''
       }
     }
   },
   methods: {
-    ...mapActions('index', ['addPhoto']),
-    upload() {
-      // this.files.forEach((file) => {
-      //   const ref = `recipes/${uuid()}`;
-      //   const uploadTask = firebase
-      //     .storage()
-      //     .ref()
-      //     .child(ref)
-      //     .put(file);
+    ...mapActions('index', ['addDownloadURL']),
+    upload(type) {
+      this.files.forEach((file) => {
+        const ref = type + `/${uuid()}`;
+        const uploadTask = firebase
+          .storage()
+          .ref()
+          .child(ref)
+          .put(file);
 
-      //   uploadTask.on(
-      //     'state_changed', 
-      //     (sp) => {
-      //       this.uploadSize = sp.totalBytes;
-      //       this.uploadedSize = sp.bytesTransferred;
-      //     },
-      //     null,
-      //     () => {
-      //       uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-      //         console.log(downloadURL);
-      //         this.removeFile(file);
-      //       });
-      //     },
-      //   );
-      // });
-      console.log(this.photo)
-      // this.addPhoto(photo) 
+        uploadTask.on(
+          'state_changed', 
+          (sp) => {
+            this.uploadSize = sp.totalBytes;
+            this.uploadedSize = sp.bytesTransferred;
+          },
+          null,
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              // console.log(downloadURL);
+              
+              this.photo.type = type
+              this.photo.url = downloadURL
+              this.addDownloadURL(this.photo)
+              this.removeFile(file);
+            });
+          },
+        );
+      });
     },
   },
 };

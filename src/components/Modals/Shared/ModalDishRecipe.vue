@@ -7,13 +7,13 @@
       type="textarea" 
       label="食譜"
       style="width: 300px" 
+      @input="$emit('update:recipe.text', $event)"
     />
 
     <div class="q-pl-md">
       <modal-photo 
         class="q-pl-md"
         ref="modalPhoto"
-        :url="recipe.photo" 
         :label="label" />
     </div>
   </div>
@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       label: {
-        name: 'recipe',
+        type: 'recipe',
         title: "食譜的照片"
       }
     }

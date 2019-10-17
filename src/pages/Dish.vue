@@ -34,7 +34,6 @@
         <modal-photo 
           class="q-pa-md" 
           ref="modalPhoto"
-          :url="dishToSubmit.dish_photo"
           :label="label" />	
       </div>
     </div>
@@ -63,7 +62,7 @@
       </form>
     </div>
 
-    
+    <!-- <q-btn @click="test()" /> -->
     <!-- <pre>{{ recipeToSubmit }}</pre> -->
     <!-- Check the value when it change -->
   </q-page>
@@ -78,7 +77,7 @@ export default {
   data() {
     return {
       label: {
-        name: 'dish',
+        type: 'dish',
         title: "料理的照片",
         save: "Save",
         cancel: "back"
@@ -122,7 +121,6 @@ export default {
         fatty_acidM: '',
         fatty_acidP: '',
         cholesterol: '',
-        last_editor: '',
       },
       containToSubmit: [],
       recipeToSubmit: {
@@ -137,8 +135,11 @@ export default {
     ...mapState('index', ['dish'])
   },
 	methods: {
-		...mapActions('index', ['addDish', 'addContain', 'addRecipe', 'setSearchType', 'setSearch']),
+    ...mapActions('index', ['addDish', 'addContain', 'addRecipe', 'setSearchType', 'setSearch']),
 		submitDish() {
+      this.$refs.modalPhoto.$refs.upload.upload('dishs')
+      this.$refs.modalDishRecipe.$refs.modalPhoto.$refs.upload.upload('recipes')
+
       this.addDish(this.dishToSubmit)
 
       for (let i = 0; i < this.containToSubmit.length; i++) {
@@ -148,9 +149,6 @@ export default {
 
       this.recipeToSubmit.dish = this.dish[this.dish.length-1].id
       this.addRecipe(this.recipeToSubmit)
-
-      this.$refs.modalDishRecipe.$refs.modalPhoto.$refs.upload.upload
-      this.$refs.modalPhoto.$refs.upload.upload
 
       this.setSearchType('dish')
       this.setSearch(this.dishToSubmit.name)

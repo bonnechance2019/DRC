@@ -3,9 +3,6 @@
     <photo-upload
       label="Custom header"
       ref="upload"
-      :name="label.name"
-      :url="url"
-      @upload="upload()"
     >
       <template v-slot:header="scope">
         <q-spinner v-if="scope.isUploading" class="q-uploader__spinner" />
@@ -29,7 +26,7 @@
 
 <script>
 export default {
-  props: ['url', 'label'],
+  props: ['label'],
   components: {
     'photo-upload': require('src/components/Upload.vue').default
   }
