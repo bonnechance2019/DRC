@@ -10,8 +10,9 @@
           v-if="scope.canAddFiles" 
           dense 
           flat 
+          icon="cloud_upload"
           class="text-left upload"
-          style="width:100%;border-radius:0px"
+          style="width:100%;border-radius:0px;height:60px"
         >
           <q-uploader-add-trigger/>
           <div class="q-uploader__title" style="padding:10px">
@@ -34,5 +35,4 @@ export default {
 </script>
 
 <style>
-
 </style>

@@ -396,6 +396,9 @@ const mutations = {
     addDish(state, payload) {
         state.dish.push(payload)
     },
+    addRestaurant(state, restaurant) {
+        state.restaurant.push(restaurant)
+    },
     addContain(state, contain) {
         for (let i = 0; i < contain.length; i++) {
             state.contain.push(contain[i])
@@ -431,6 +434,9 @@ const actions = {
         let payload = dish
         payload.id = dishId
         commit('addDish', payload)
+    },
+    addRestaurant({commit}, restaurant) {
+        commit('addRestaurant', restaurant)
     },
     addContain({commit}, contain) {
         commit('addContain', contain)

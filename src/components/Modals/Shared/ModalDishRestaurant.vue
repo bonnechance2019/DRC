@@ -4,9 +4,10 @@
       <q-btn-toggle
         v-model="type"
         toggle-color="primary"
+        text-color="blue"
         :options="[
-          {label: '新增', value: 'add'},
-          {label: '查詢', value: 'search'},
+          {value: 'add', icon: 'add'},
+          {value: 'search', icon: 'search'},
         ]"
       />
     </div>
@@ -35,7 +36,7 @@
       v-if="type == 'search'"
       filled
       :value="restaurant_id"
-      @input="$emit('update:restaurant_id', $event)"
+      @input="$emit('update:restaurant_id', $event), $emit('oldRestaurant')"
       :rules="[val => !!val || 'Field is required']" 
       ref="restaurant_id"
       label="餐廳" 

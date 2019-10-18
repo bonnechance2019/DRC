@@ -5,14 +5,9 @@
       title="食譜"
       v-for="(recipe, id) in recipe"
       :key="id"
-      style="max-width: 300px"
+      style="max-width:300px;color:black;"
     >
       <img :src="recipe.photo">
-
-      <q-card-section>
-        <!-- 更改者 -->
-        <!-- <div class="text-subtitle2">{{ edtior }}</div> -->
-      </q-card-section>
 
       <q-card-section>
         {{ recipe.text }}

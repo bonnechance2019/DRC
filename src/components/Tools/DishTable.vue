@@ -1,13 +1,13 @@
 <template>
   <q-table
-    dense
     title="料理"
     :data="dish"
     :columns="dish_nutrient"
     row-key="id"
     selection="single"
     :selected.sync="selected"
-    @selection="selectDish"
+    @selection="selectDish"  
+    card-class="bg-light-blue-2"
   > 
     <template v-slot:top="props">
       <q-th class="row">
@@ -80,6 +80,6 @@ export default {
 }
 </script>
 
-<style>
+<style lang="sass">
 
 </style>

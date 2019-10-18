@@ -12,7 +12,7 @@
 
     <div class="q-pl-md">
       <modal-photo 
-        class="q-pl-md"
+        style="padding-left: 85px"
         ref="modalPhoto"
         :label="label" />
     </div>

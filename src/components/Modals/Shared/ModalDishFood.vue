@@ -10,12 +10,11 @@
             dense
             v-close-popup 
             icon="highlight_off"
-            class="q-pr-lg"
+            size="17px"
           />
         </div>
 
         <q-item
-          dense
           v-show="search"
           v-for="dishFood in food"
           :key="dishFood.id"

@@ -21,6 +21,7 @@
         color="blue-6"   
         @click="setSearchType('dish')" 
         label="料理" 
+        icon="restaurant"
       />
 
       <q-btn 
@@ -28,6 +29,7 @@
         color="blue-6" 
         @click="setSearchType('food')" 
         label="食材" 
+        icon="local_pizza"
       />
 
       <div 
@@ -38,20 +40,24 @@
       </div>
     </div>
 
-    <dish-table 
-      v-show="search && searchType=='dish'"
-      :showFood.sync="showFood"
-      :showRecipe.sync="showRecipe"
-      @true="showFood=true"
-      @false="showFood=false"
-      @showRecipe="showRecipe=!showRecipe"
-    />
-    <br>
-    <!-- 根據料理編輯 -->
-      
-    <food-table v-if="(search && searchType=='food') || showFood"/>
+    <q-card class="my-card text-white full-width" style="background: radial-gradient(circle, #ffffff 0%, #eeffe6 80%)">   
+      <dish-table 
+        v-show="search && searchType=='dish'"
+        :showFood.sync="showFood"
+        :showRecipe.sync="showRecipe"
+        @true="showFood=true"
+        @false="showFood=false"
+        @showRecipe="showRecipe=!showRecipe"
+      />
+      <!-- 根據料理編輯 -->
 
-    <recipe-table v-if="showRecipe && showFood" class="col"/>
+      <hr v-if="showFood">
+      <food-table v-if="(search && searchType=='food') || showFood"/>
+
+      <hr v-if="showRecipe && showFood">
+      <recipe-table v-if="showRecipe && showFood" class="col"/>
+      
+    </q-card>
   </q-page>
 </template>
 

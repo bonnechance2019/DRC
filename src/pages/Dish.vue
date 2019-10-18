@@ -1,69 +1,83 @@
 <template>
-  <q-page class="q-pa-md absolute full-width column">
-    <div class="q-pl-md">
+  <q-page 
+    class="q-pa-md absolute full-width column"
+    style="background: radial-gradient(circle, #FFFFFF 0%, #708090 80%)"  
+  >
+    <div class="q-pa-md">
       <q-btn
-        outline
         color="blue-5"
         icon="arrow_back"
         to="/"
       />
     </div>
+    <q-card 
+      class="my-card text-white full-width"
+      style="background: #F8F8FF"  
+    >
+      <q-card-section class="row" style="padding-left: 150px">
+        <div class="q-pt-md">
+          <modal-dish-name 
+            :name.sync="dishToSubmit.name"
+            ref="modalDishName" />
 
-    <div class="row">
-      <div class="q-pa-md">
-        <modal-dish-name 
-          :name.sync="dishToSubmit.name"
-          ref="modalDishName" />
+          <q-btn
+            label="組成食材"
+            icon="library_add"
+            outline
+            :color="containError ? 'negative' : 'primary'"
+            type="submit"
+            size="16px"
+            @click="showDishFood=true, setSearchType('')"
+          />
+        </div>
 
-        <q-btn
-          label="食材"
-          :color="containError ? 'negative' : 'primary'"
-          type="submit"
-          @click="showDishFood=true, setSearchType('')"
-        />
-      </div>
+        <q-dialog v-model="showDishFood" :cancel="true" :persistent="true">
+          <modal-dish-food 
+            :containToSubmit="containToSubmit"
+            ref="modalDishFood"
+            @close="showDishFood=false"/>
+        </q-dialog>
+        
+        <div class="q-pt-md">
+          <modal-photo 
+            class="q-pa-md"
+            style="padding-left: 100px" 
+            ref="modalPhoto"
+            :label="label" />	
+        </div>
+      </q-card-section>
 
-      <q-dialog v-model="showDishFood">
-        <modal-dish-food 
+      <q-card-section>
+        <modal-dish-recipe 
+          style="padding-left: 115px"
+          ref="modalDishRecipe"
+          :recipe.sync="recipeToSubmit"/>	
+      </q-card-section>
+
+        <q-card-section class="q-pl-md" style="padding-left: 145px">
+          <modal-dish-restaurant 
+            style="max-width: 300px;"
+            :restaurant_id.sync="dishToSubmit.restaurant_id"
+            @oldRestaurant="newRestaurant=false"
+            ref="modalDishRestaurant" />
+        </q-card-section>
+
+      <div class="col q-pa-md" >
+        <food-table
+          v-if="!showDishFood && containToSubmit.length"
           :containToSubmit="containToSubmit"
-          ref="modalDishFood"
-          @close="showDishFood=false"/>
-      </q-dialog>
+          :dishToSubmit="dishToSubmit" />
+
       
-      <div class="q-pt-md">
-        <modal-photo 
-          class="q-pa-md" 
-          ref="modalPhoto"
-          :label="label" />	
+        
       </div>
-    </div>
-
-    <modal-dish-recipe 
-      class="q-pt-md"
-      ref="modalDishRecipe"
-      :recipe.sync="recipeToSubmit"/>	
-
-    <div class="q-pl-md">
-      <modal-dish-restaurant 
-        style="max-width: 300px;"
-        :restaurant_id.sync="dishToSubmit.restaurant_id"
-        ref="modalDishRestaurant" />
-    </div>
-
-    <div class="col q-pa-md" >
-      <food-table
-        v-if="!showDishFood && containToSubmit.length"
-        :containToSubmit="containToSubmit"
-        :dishToSubmit="dishToSubmit" />
-
-     
-      <form @submit="submitForm"> 
-        <modal-buttons :label="label.save" />
-      </form>
-    </div>
-
+    </q-card>
+    
+    <form @submit="submitForm"> 
+      <modal-buttons :label="label.save" />
+    </form>
     <!-- <q-btn @click="test()" /> -->
-    <!-- <pre>{{ recipeToSubmit }}</pre> -->
+    <!-- <pre>{{ dishToSubmit }}</pre> -->
     <!-- Check the value when it change -->
   </q-page>
 </template>
@@ -76,6 +90,7 @@ export default {
   mixins: [mixinAddEditDish],
   data() {
     return {
+      newRestaurant: true,
       label: {
         type: 'dish',
         title: "料理的照片",
@@ -135,12 +150,15 @@ export default {
     ...mapState('index', ['dish'])
   },
 	methods: {
-    ...mapActions('index', ['addDish', 'addContain', 'addRecipe', 'setSearchType', 'setSearch']),
+    ...mapActions('index', ['addDish', 'addContain', 'addRecipe', 'setSearchType', 'setSearch', 'addRestaurant']),
 		submitDish() {
       this.$refs.modalPhoto.$refs.upload.upload('dishs')
       this.$refs.modalDishRecipe.$refs.modalPhoto.$refs.upload.upload('recipes')
 
       this.addDish(this.dishToSubmit)
+      if (this.newRestaurant) {
+        this.addRestaurant(this.dishToSubmit.restaurant_id)
+      }
 
       for (let i = 0; i < this.containToSubmit.length; i++) {
         this.containToSubmit[i].dish = this.dish[this.dish.length-1].id

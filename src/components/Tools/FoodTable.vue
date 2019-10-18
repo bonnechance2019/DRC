@@ -1,19 +1,21 @@
 <template>
   <q-table
     v-if="searchType == 'dishAdd'"
-    dense
     title="食材"
     :data="foodList"
     :columns="food_nutrient"
     row-key="id"
+    class="sticky-header-column-table"
+    card-class="bg-amber-2"
   /> 
   <q-table
     v-else
-    dense
     title="食材"
     :data="food"
     :columns="food_nutrient"
     row-key="id"
+    class="sticky-header-column-table"
+    card-class="bg-amber-2"
   />
 </template>
 
@@ -146,6 +148,31 @@ export default {
 }
 </script>
 
-<style>
+<style lang="sass">
+  .sticky-header-column-table 
+    .q-table__middle
+      max-height: 600px // 600px
 
+    td:first-child /* bg color is important for td; just specify one */
+      background-color: $amber-2 !important
+
+    tr:first-child th
+      position: sticky
+      top: 0
+      opacity: 1 /* opacity is important */
+      z-index: 2 /* higher than z-index for td below */
+      background: $amber-2 /* bg color is important; just specify one */
+
+    tr:first-child th:first-child
+      z-index: 3 /* highest z-index */
+
+    td:first-child
+      z-index: 1
+
+    td:first-child, th:first-child
+      position: sticky
+      left: 0
+
+  .q-table tbody td
+    font-size: 14px
 </style>
