@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       label: {
-        type: 'recipe',
+        type: 'recipes',
         title: "食譜的照片"
       }
     }

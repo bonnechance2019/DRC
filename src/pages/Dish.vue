@@ -35,7 +35,9 @@
           <modal-dish-food 
             :containToSubmit="containToSubmit"
             ref="modalDishFood"
-            @close="showDishFood=false"/>
+            @showDishFood="showDishFood=false"
+            @close="containToSubmit? setSearchType('dishAdd'):'' "
+          />
         </q-dialog>
         
         <div class="q-pt-md">
@@ -67,13 +69,10 @@
           v-if="!showDishFood && containToSubmit.length"
           :containToSubmit="containToSubmit"
           :dishToSubmit="dishToSubmit" />
-
-      
-        
       </div>
     </q-card>
     
-    <form @submit="submitForm"> 
+    <form @submit.prevent="submitForm"> 
       <modal-buttons :label="label.save" />
     </form>
     <!-- <q-btn @click="test()" /> -->
@@ -92,7 +91,7 @@ export default {
     return {
       newRestaurant: true,
       label: {
-        type: 'dish',
+        type: 'dishs',
         title: "料理的照片",
         save: "Save",
         cancel: "back"
@@ -147,26 +146,29 @@ export default {
     }
   },
   computed: {
-    ...mapState('index', ['dish'])
+    ...mapState('index', ['dish', 'dish_id', 'dish_photo', 'recipe_photo'])
   },
 	methods: {
     ...mapActions('index', ['addDish', 'addContain', 'addRecipe', 'setSearchType', 'setSearch', 'addRestaurant']),
 		submitDish() {
-      this.$refs.modalPhoto.$refs.upload.upload('dishs')
-      this.$refs.modalDishRecipe.$refs.modalPhoto.$refs.upload.upload('recipes')
+      this.dishToSubmit.dish_photo = this.dish_photo
+      this.recipeToSubmit.photo = this.recipe_photo
 
       this.addDish(this.dishToSubmit)
+
       if (this.newRestaurant) {
         this.addRestaurant(this.dishToSubmit.restaurant_id)
       }
 
       for (let i = 0; i < this.containToSubmit.length; i++) {
-        this.containToSubmit[i].dish = this.dish[this.dish.length-1].id
+        this.containToSubmit[i].dish = this.dish_id
       }
       this.addContain(this.containToSubmit)
 
-      this.recipeToSubmit.dish = this.dish[this.dish.length-1].id
-      this.addRecipe(this.recipeToSubmit)
+      if (this.recipeToSubmit.text) {
+        this.recipeToSubmit.dish = this.dish_id
+        this.addRecipe(this.recipeToSubmit)
+      }
 
       this.setSearchType('dish')
       this.setSearch(this.dishToSubmit.name)

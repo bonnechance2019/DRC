@@ -3,7 +3,7 @@
     <form @submit.prevent="handleContain()">
       <q-card-section class="q-pa-md">
         <div class="row">
-          <search/>
+          <search />
 
           <q-btn 
             flat
@@ -11,27 +11,27 @@
             v-close-popup 
             icon="highlight_off"
             size="17px"
+            @click="$emit('close'), clearSearch()"
           />
         </div>
 
         <q-item
-          v-show="search"
-          v-for="dishFood in food"
+          v-for="dishFood in foodQuantity"
           :key="dishFood.id"
+          v-show="search && foodQuantityFilter(dishFood.name)"
         >
-          {{ dishFood.name }}
           <q-input
             dense
-            label="幾克（升）"
-            v-model="foodQuantity[dishFood.id-1].quantity"
+            :label="dishFood.name"
+            v-model="dishFood.quantity"
             type="text"
-            @input="foodQuantity[dishFood.id-1].quantity = handleFoodQuantityType(foodQuantity[dishFood.id-1].quantity)"
-            style="max-width: 100px"
+            @input="dishFood.quantity = handleFoodQuantityType(dishFood.quantity)"
+            style="max-width: 150px"
           >
             <template v-slot:append>
               <q-icon 
                 name="close" 
-                @click="foodQuantity[dishFood.id-1].quantity = 0" 
+                @click="dishFood.quantity = 0" 
                 class="cursor-pointer" 
               /> 
             </template>
@@ -58,8 +58,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('index', ['search', 'containTemp']),
-    ...mapGetters('index', ['food']),
+    ...mapState('index', ['search']),
+    ...mapGetters('index', ['food'])
   },
   methods: {
     ...mapActions('index',['clearSearch', 'setSearchType']),
@@ -93,7 +93,13 @@ export default {
       }
       this.clearSearch()
       this.setSearchType('dishAdd')
-      this.$emit('close')
+      this.$emit('showDishFood')
+    },
+    foodQuantityFilter(name) {
+      if (name.includes(this.search)) {
+        return true   
+      }
+      else return false
     }
   },
   components: {
@@ -105,6 +111,7 @@ export default {
       for (let i = 0; i < this.food.length; i++) {
         this.foodQuantity.push({
           food: this.food[i].id,
+          name: this.food[i].name,
           quantity: 0
         })
       }

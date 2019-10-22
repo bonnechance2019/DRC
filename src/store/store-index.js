@@ -1,6 +1,7 @@
 import Vue from 'vue'
-import { uid, LocalStorage } from 'quasar'
-import { firebaseData, firebaseAuth } from 'src/boot/firebase'
+import { uid, Notify } from 'quasar'
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 
 const state = {
     dish_nutrient: [
@@ -97,275 +98,104 @@ const state = {
     ],
 
     dish: [
-        {
-            id: '2',
-            name: '水煮蛋',
-            restaurant_id: '第一餐廳',
-            dish_photo: 'https://i.imgur.com/s1YrjzKr.jpg',
-            calories: 200,
-            fat: 200,
-            protein: 200,
-            carbs: 200,
-            grains: 200,
-            fruits: 200,
-            vegetables: 200,
-            oils: 200,
-            dairy: 200,
-            meat_and_beans: 200,
-            dietary_fiber: 200,
-            total_sugar: 200,
-            sodium: 200,
-            potassium: 200,
-            calcium: 200,
-            magnesium: 200,
-            iron: 200,
-            zinc: 200,
-            phosphorus: 200,
-            vitaminA: 200,
-            vision_alcohol: 200,
-            vitaminE: 200,
-            vitaminB1: 200,
-            vitaminB2: 200,
-            vitaminB6: 200,
-            vitaminB12: 200,
-            vitaminC: 200,
-            nicotin: 200,
-            folic_acid: 200,
-            fatty_acidS: 200,
-            fatty_acidM: 200,
-            fatty_acidP: 200,
-            cholesterol: 200,
-        },
-        {
-            id: '1',
-            name: '水餃',
-            restaurant_id: '飯店',
-            dish_photo: 'https://i.imgur.com/GzaDoDhb.jpg',
-            calories: 125,
-            fat: 125,
-            protein: 125,
-            carbs: 125,
-            grains: 125,
-            fruits: 125,
-            vegetables: 125,
-            oils: 125,
-            dairy: 125,
-            meat_and_beans: 125,
-            dietary_fiber: 125,
-            total_sugar: 125,
-            sodium: 125,
-            potassium: 125,
-            calcium: 125,
-            magnesium: 125,
-            iron: 125,
-            zinc: 125,
-            phosphorus: 125,
-            vitaminA: 125,
-            vision_alcohol: 125,
-            vitaminE: 125,
-            vitaminB1: 125,
-            vitaminB2: 125,
-            vitaminB6: 125,
-            vitaminB12: 125,
-            vitaminC: 125,
-            nicotin: 125,
-            folic_acid: 125,
-            fatty_acidS: 125,
-            fatty_acidM: 125,
-            fatty_acidP: 125,
-            cholesterol: 125,
-        },
-        {
-            id: '3',
-            name: '千層糕',
-            restaurant_id: '第一餐廳',
-            dish_photo: '',
-            calories: 300,
-            fat: 300,
-            protein: 300,
-            carbs: 300,
-            grains: 300,
-            fruits: 300,
-            vegetables: 300,
-            oils: 300,
-            dairy: 300,
-            meat_and_beans: 300,
-            dietary_fiber: 300,
-            total_sugar: 300,
-            sodium: 300,
-            potassium: 300,
-            calcium: 300,
-            magnesium: 300,
-            iron: 300,
-            zinc: 300,
-            phosphorus: 300,
-            vitaminA: 300,
-            vision_alcohol: 300,
-            vitaminE: 300,
-            vitaminB1: 300,
-            vitaminB2: 300,
-            vitaminB6: 300,
-            vitaminB12: 300,
-            vitaminC: 300,
-            nicotin: 300,
-            folic_acid: 300,
-            fatty_acidS: 300,
-            fatty_acidM: 300,
-            fatty_acidP: 300,
-            cholesterol: 300,
-        },
-    ],  //水餃、水煮蛋、千層糕
+        // {
+        //     id: '1',
+        //     name: '水餃',
+        //     restaurant_id: '飯店',
+        //     dish_photo: 'https://i.imgur.com/GzaDoDhb.jpg',
+        //     calories: 125,
+        //     fat: 125,
+        //     protein: 125,
+        //     carbs: 125,
+        //     grains: 125,
+        //     fruits: 125,
+        //     vegetables: 125,
+        //     oils: 125,
+        //     dairy: 125,
+        //     meat_and_beans: 125,
+        //     dietary_fiber: 125,
+        //     total_sugar: 125,
+        //     sodium: 125,
+        //     potassium: 125,
+        //     calcium: 125,
+        //     magnesium: 125,
+        //     iron: 125,
+        //     zinc: 125,
+        //     phosphorus: 125,
+        //     vitaminA: 125,
+        //     vision_alcohol: 125,
+        //     vitaminE: 125,
+        //     vitaminB1: 125,
+        //     vitaminB2: 125,
+        //     vitaminB6: 125,
+        //     vitaminB12: 125,
+        //     vitaminC: 125,
+        //     nicotin: 125,
+        //     folic_acid: 125,
+        //     fatty_acidS: 125,
+        //     fatty_acidM: 125,
+        //     fatty_acidP: 125,
+        //     cholesterol: 125,
+        // },
+    ],  
 
     food: [
-        {
-            id: '1',
-            name: '豬肉',
-            quantity: 5,
-            calories: 5,
-            fat: 5,
-            protein: 5,
-            carbs: 5,
-            grains: 5,
-            fruits: 5,
-            vegetables: 5,
-            oils: 5,
-            dairy: 5,
-            meat_and_beans: 5,
-            dietary_fiber: 5,
-            total_sugar: 5,
-            sodium: 5,
-            potassium: 5,
-            calcium: 5,
-            magnesium: 5,
-            iron: 5,
-            zinc: 5,
-            phosphorus: 5,
-            vitaminA: 5,
-            vision_alcohol: 5,
-            vitaminE: 5,
-            vitaminB1: 5,
-            vitaminB2: 5,
-            vitaminB6: 5,
-            vitaminB12: 5,
-            vitaminC: 5,
-            nicotin: 5,
-            folic_acid: 5,
-            fatty_acidS: 5,
-            fatty_acidM: 5,
-            fatty_acidP: 5,
-            cholesterol: 5,
-        },
-        {
-            id: '2',
-            name: '豬腳',
-            quantity: 5,
-            calories: 5,
-            fat: 5,
-            protein: 5,
-            carbs: 5,
-            grains: 5,
-            fruits: 5,
-            vegetables: 5,
-            oils: 5,
-            dairy: 5,
-            meat_and_beans: 5,
-            dietary_fiber: 5,
-            total_sugar: 5,
-            sodium: 5,
-            potassium: 5,
-            calcium: 5,
-            magnesium: 5,
-            iron: 5,
-            zinc: 5,
-            phosphorus: 5,
-            vitaminA: 5,
-            vision_alcohol: 5,
-            vitaminE: 5,
-            vitaminB1: 5,
-            vitaminB2: 5,
-            vitaminB6: 5,
-            vitaminB12: 5,
-            vitaminC: 5,
-            nicotin: 5,
-            folic_acid: 5,
-            fatty_acidS: 5,
-            fatty_acidM: 5,
-            fatty_acidP: 5,
-            cholesterol: 5,
-        },
-        {
-            id: '3',
-            name: '蛋',
-            quantity: 10,
-            calories: 10,
-            fat: 10,
-            protein: 10,
-            carbs: 10,
-            grains: 10,
-            fruits: 10,
-            vegetables: 10,
-            oils: 10,
-            dairy: 10,
-            meat_and_beans: 10,
-            dietary_fiber: 10,
-            total_sugar: 10,
-            sodium: 10,
-            potassium: 10,
-            calcium: 10,
-            magnesium: 10,
-            iron: 10,
-            zinc: 10,
-            phosphorus: 10,
-            vitaminA: 10,
-            vision_alcohol: 10,
-            vitaminE: 10,
-            vitaminB1: 10,
-            vitaminB2: 10,
-            vitaminB6: 10,
-            vitaminB12: 10,
-            vitaminC: 10,
-            nicotin: 10,
-            folic_acid: 10,
-            fatty_acidS: 10,
-            fatty_acidM: 10,
-            fatty_acidP: 10,
-            cholesterol: 10,
-        },
-    ],  //豬肉、高麗菜、蛋
-    restaurant: [
-        '第一餐廳',
-        '飯店'
+        // {
+            // id: '3',
+            // name: '蛋',
+            // quantity: 10,
+            // calories: 10,
+            // fat: 10,
+            // protein: 10,
+            // carbs: 10,
+            // grains: 10,
+            // fruits: 10,
+            // vegetables: 10,
+            // oils: 10,
+            // dairy: 10,
+            // meat_and_beans: 10,
+            // dietary_fiber: 10,
+            // total_sugar: 10,
+            // sodium: 10,
+            // potassium: 10,
+            // calcium: 10,
+            // magnesium: 10,
+            // iron: 10,
+            // zinc: 10,
+            // phosphorus: 10,
+            // vitaminA: 10,
+            // vision_alcohol: 10,
+            // vitaminE: 10,
+            // vitaminB1: 10,
+            // vitaminB2: 10,
+            // vitaminB6: 10,
+            // vitaminB12: 10,
+            // vitaminC: 10,
+            // nicotin: 10,
+            // folic_acid: 10,
+            // fatty_acidS: 10,
+            // fatty_acidM: 10,
+            // fatty_acidP: 10,
+            // cholesterol: 10,
+        //}
+    ],
+    restaurant: [  
+        // '餐廳'
     ],
     contain: [
-        {
-            dish: '1',
-            food: '1',
-            quantity: 10
-        },
-        {
-            dish: '1',
-            food: '2',
-            quantity: 15
-        },
-        {
-            dish: '2',
-            food: '3',
-            quantity: 20
-        }
+        // {
+        //     dish: '1',
+        //     food: '1',
+        //     quantity: 10
+        // },
     ],
     recipe: [
-        {
-            id: '1',
-            dish: '1',
-            photo: 'https://uploads-blog-icook.icook.network/2016/12/2016year-hot-recipe-200ppi-640x800.png',
-            text: '1.高麗菜切碎(小丁)、韭黃或蔥皆切末；薑蘑成泥。高麗菜、韭黃、蔥分開加鹽，以保鮮膜密封，放置1小時出水。出水後以清水將鹽分沖掉、儘可能瀝乾水份。2.將豬絞肉(要用時再從冰箱取出)、蔥花、韭黃、薑、水放入盆中攪拌均勻。再加入高麗菜拌勻。加入醬油、白胡椒粉後拌至略有黏性，即可開始包水餃。',
-        },
-        {
-            id: '2',
-            dish: '2',
-            photo: '',
-            text: '1.放入滾水，直到浮起。'
-        }
+        // {
+        //     id: '1',
+        //     dish: '1',
+        //     photo: 'https://uploads-blog-icook.icook.network/2016/12/2016year-hot-recipe-200ppi-640x800.png',
+        //     text: '1.高麗菜切碎(小丁)、韭黃或蔥皆切末；薑蘑成泥。高麗菜、韭黃、蔥分開加鹽，以保鮮膜密封，放置1小時出水。出水後以清水將鹽分沖掉、儘可能瀝乾水份。2.將豬絞肉(要用時再從冰箱取出)、蔥花、韭黃、薑、水放入盆中攪拌均勻。再加入高麗菜拌勻。加入醬油、白胡椒粉後拌至略有黏性，即可開始包水餃。',
+        // }
     ],
     editor: [
         {
@@ -374,6 +204,9 @@ const state = {
             time:''
         }
     ],
+    dish_id: '',
+    dish_photo:'無',
+    recipe_photo: '無',
     search: '', //開發預設
     searchType: '',
     select: ''
@@ -393,25 +226,29 @@ const mutations = {
         state.searchType = value
     },
 
+    addFood(state, payload) {
+        state.food.push(payload)
+    },
     addDish(state, payload) {
         state.dish.push(payload)
+    },
+    setDishId(state, payload) {
+        state.dish_id = payload
     },
     addRestaurant(state, restaurant) {
         state.restaurant.push(restaurant)
     },
     addContain(state, contain) {
-        for (let i = 0; i < contain.length; i++) {
-            state.contain.push(contain[i])
-        }
+        state.contain.push(contain)
     },
     addRecipe(state, payload) {
         state.recipe.push(payload)
     },
     addDishPhoto(state, url) {
-        state.dish[state.dish.length-1].dish_photo = url
+        state.dish_photo = url
     },
     addRecipePhoto(state, url) {
-        state.recipe[state.recipe.length-1].photo = url
+        state.recipe_photo = url
     }
 }
 
@@ -429,23 +266,29 @@ const actions = {
         commit('setSearchType', value)
     },
 
-    addDish({commit}, dish) {
+    addDish({commit, dispatch}, dish) {
         let dishId = uid()
         let payload = dish
         payload.id = dishId
-        commit('addDish', payload)
+        commit('setDishId', payload.id)
+        dispatch('fbAddDish', payload)
     },
-    addRestaurant({commit}, restaurant) {
-        commit('addRestaurant', restaurant)
+    addRestaurant({dispatch}, restaurant) {
+        let payload = {
+            name: restaurant
+        }
+        dispatch('fbAddRestaurant', payload)
     },
-    addContain({commit}, contain) {
-        commit('addContain', contain)
+    addContain({dispatch}, contain) {
+        for (let i = 0; i < contain.length; i++) {
+            dispatch('fbAddContain', contain[i])
+        }
     },
-    addRecipe({commit}, recipe) {
+    addRecipe({dispatch}, recipe) {
         let id = uid()
         let payload = recipe
         payload.id = id
-        commit('addRecipe', payload)
+        dispatch('fbAddRecipe', payload)
     },
     addDownloadURL({commit}, photo) {
         if (photo.type == 'dishs') {
@@ -454,7 +297,116 @@ const actions = {
         else if (photo.type == 'recipes') {
             commit('addRecipePhoto', photo.url)
         }
-    }
+    },
+
+    fbReadData({ commit }) {
+        // let userId = firebaseAuth.currentUser.uid
+        let db = firebase.firestore()
+        
+        // initial get foods form firestore
+        db.collection('foods').get().then(snapshot => {
+            snapshot.forEach((doc) => {
+                commit('addFood', doc.data())
+            })
+        })
+        
+        // listen realtime update and handle data
+        db.collection("dishs").onSnapshot(function(snapshot) {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === "added") {
+                    commit('addDish', change.doc.data())
+                }
+                // if (change.type === "modified") {
+                    
+                // }
+                // if (change.type === "removed") {
+                    
+                // }
+            })
+        })
+        db.collection("restaurants").onSnapshot(function(snapshot) {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === "added") {
+                    commit('addRestaurant', change.doc.data().name)
+                }
+            })
+        })
+        db.collection("recipes").onSnapshot(function(snapshot) {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === "added") {
+                    commit('addRecipe', change.doc.data())
+                }
+            })
+        })
+        db.collection("contains").onSnapshot(function(snapshot) {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === "added") {
+                    commit('addContain', change.doc.data())
+                }
+            })
+        })
+    },
+
+    fbAddDish({}, payload) {
+        // let userId = firebaseAuth.currentUser.uid
+        let dishRef = firebase.firestore().collection("dishs")
+        dishRef.add(payload)
+        .then(function() {
+            // Notify.create('添加成功！')
+        })
+        .catch(function(error) {
+            console.error("Error adding dish: ", error);
+        });
+    },
+    fbAddRestaurant({}, payload) {
+        // let userId = firebaseAuth.currentUser.uid
+        let restaurantRef = firebase.firestore().collection("restaurants")
+        restaurantRef.add(payload)
+        .then(function() {
+            // Notify.create('添加成功！')
+        })
+        .catch(function(error) {
+            console.error("Error adding restaurant: ", error);
+        });
+    },
+    fbAddRecipe({}, payload) {
+        // let userId = firebaseAuth.currentUser.uid
+        let recipeRef = firebase.firestore().collection("recipes")
+        recipeRef.add(payload)
+        .then(function() {
+            // Notify.create('添加成功！')
+        })
+        .catch(function(error) {
+            console.error("Error adding recipe: ", error);
+        });
+    },
+    fbAddContain({}, payload) {
+        // let userId = firebaseAuth.currentUser.uid
+        let containRef = firebase.firestore().collection("contains")
+        containRef.add(payload)
+        .then(function() {
+            // Notify.create('添加成功！')
+        })
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
+        });
+    },
+
+    // fbUpdateDish({}, payload) {
+    //     let userId = firebaseAuth.currentUser.uid
+    //     let taskRef = firebaseData.ref('tasks/' + userId + '/' + payload.id)
+    //     taskRef.update(payload.updates, error => {
+    //         if (error) {
+    //             showError(error.message)
+    //         }
+    //         else {
+    //             let key = Object.keys(payload.updates)
+    //             // console.log(key)
+    //             if (!(key == 'completed' && key.length == 1)) // todo 完成則長度為1，更改 todo 則長度為4
+    //             Notify.create('Task updated!')
+    //         }
+    //     })
+    // }
 }
 
 const getters = {
@@ -580,8 +532,7 @@ const getters = {
     },
     foodFiltered: (state, getters) => {
         let foodFiltered = []
-        let i = 0
-        for (i; i < state.food.length; i++) {
+        for (let i = 0; i < state.food.length; i++) {
             if (state.food[i].name.includes(state.search)) {
                 foodFiltered.push(state.food[i])   
             }

@@ -7,7 +7,7 @@
       :key="id"
       style="max-width:300px;color:black;"
     >
-      <img :src="recipe.photo">
+      <img :src="photo()" />
 
       <q-card-section>
         {{ recipe.text }}
@@ -21,9 +21,16 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('index', ['recipe']),
+    ...mapGetters('index', ['recipe'])
   },
-
+  methods: {
+    photo() {
+      if (this.recipe.photo == '無' || !this.recipe.photo) {
+        return ''
+      }
+      else return this.recipe.photo
+    }
+  },
 }
 </script>
 

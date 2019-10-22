@@ -1,5 +1,9 @@
 <template>
   <q-page class="q-pa-md absolute full-width column">
+
+    <!-- 測試讀取firebase -->
+    <q-btn @click="fbReadData()" />
+
     <div class="q-pa-md">
       <q-btn  
         @click="showFood = false, setSearch(''), setSearchType('')"
@@ -76,7 +80,7 @@ export default {
     ...mapState('index', ['searchType', 'search'])
   },
   methods: {
-    ...mapActions('index', ['setSearchType', 'setSearch'])
+    ...mapActions('index', ['setSearchType', 'setSearch', 'fbReadData'])
   },
   components: {
     'search': require('src/components/Tools/Search.vue').default,

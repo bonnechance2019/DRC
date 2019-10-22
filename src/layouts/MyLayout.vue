@@ -13,10 +13,8 @@
         </q-btn>
 
         <q-toolbar-title>
-          DRC App
+          營養分析
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
