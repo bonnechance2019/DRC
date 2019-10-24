@@ -14,7 +14,8 @@
       <modal-photo 
         style="padding-left: 85px"
         ref="modalPhoto"
-        :label="label" />
+        :label="label"
+      />
     </div>
   </div>
 </template>

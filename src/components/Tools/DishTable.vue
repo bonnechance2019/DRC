@@ -6,8 +6,8 @@
     row-key="id"
     selection="single"
     :selected.sync="selected"
-    @selection="selectDish"  
-    card-class="bg-light-blue-2"
+    @selection="selectDish" 
+    class="dish-table" 
   > 
     <template v-slot:top="props">
       <q-th class="row">
@@ -29,6 +29,14 @@
       </q-th>
     </template>
 
+    <template v-slot:body-cell-name="props"> 
+      <q-td key="name" :props="props" class="dish-name">
+        <!-- <q-btn flat @click="editFood(props.row.id)"> -->
+          {{ props.row.name }}
+        <!-- </q-btn> -->
+      </q-td>
+    </template>
+
     <template v-slot:body-cell-dish_photo="props">
       <q-td> 
         <q-img
@@ -38,6 +46,54 @@
         />
       </q-td>
     </template> 
+
+    <template v-slot:body-cell-grains="props">  
+      <q-td key="grains" :props="props">
+        <q-badge color="amber">
+          {{ props.row.grains }}
+        </q-badge>
+      </q-td>
+    </template>
+
+    <template v-slot:body-cell-fruits="props">  
+      <q-td key="fruits" :props="props">
+        <q-badge color="orange">
+          {{ props.row.fruits }}
+        </q-badge>
+      </q-td>
+    </template>
+
+    <template v-slot:body-cell-vegetables="props">  
+      <q-td key="vegetables" :props="props">
+        <q-badge color="green">
+          {{ props.row.vegetables }}
+        </q-badge>
+      </q-td>
+    </template>
+
+    <template v-slot:body-cell-oils="props">  
+      <q-td key="oils" :props="props">
+        <q-badge color="red">
+          {{ props.row.oils }}
+        </q-badge>
+      </q-td>
+    </template>
+
+    <template v-slot:body-cell-dairy="props">  
+      <q-td key="dairy" :props="props">
+        <q-badge color="blue">
+          {{ props.row.dairy }}
+        </q-badge>
+      </q-td>
+    </template>
+
+    <template v-slot:body-cell-meat_and_beans="props">  
+      <q-td key="meat_and_beans" :props="props">
+        <q-badge color="purple">
+          {{ props.row.meat_and_beans }}
+        </q-badge>
+      </q-td>
+    </template>
   </q-table>
 </template>
 
@@ -81,5 +137,32 @@ export default {
 </script>
 
 <style lang="sass">
+.dish-table
+  .q-table
+    td:first-child
+      position: sticky
+      background-color: $amber-3 !important
+
+    tr:first-child th
+      position: sticky
+      top: 0
+      opacity: 1 /* opacity is important */
+      z-index: 2 /* higher than z-index for td below */
+      color: $indigo-8
+  
+    tr:first-child th:first-child
+      z-index: 3 /* highest z-index */
+      background: white
+
+    td:first-child
+      z-index: 1
+
+    td:first-child, th:first-child
+      position: sticky
+      left: 0
+
+  .dish-name
+    background-color: $amber-3
+    
 
 </style>

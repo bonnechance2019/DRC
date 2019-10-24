@@ -1,10 +1,14 @@
 <template>
-  <q-page class="q-pa-md absolute full-width column">
+  <q-page 
+    class="q-pa-md absolute full-width column"
+    :style="searchDish? 
+    `background: #e6f9ff`:'background: #e6ffe6'"
+  >
 
     <!-- 測試讀取firebase -->
     <q-btn @click="fbReadData()" />
 
-    <div class="q-pa-md">
+    <div class="q-pa-md row">
       <q-btn  
         @click="showFood = false, setSearch(''), setSearchType('')"
         to="/dish"
@@ -15,26 +19,28 @@
         size="15px" 
         icon="add" 
       />
+
+      <div style="padding-left:40px;padding-top:5px">
+        <q-btn
+          :disable="searchType=='dish'" 
+          color="blue-6"   
+          @click="setSearchType('dish'), searchDish=true" 
+          label="料理" 
+          icon="restaurant"
+        />
+
+        <q-btn 
+          :disable="searchType=='food' || showFood" 
+          color="blue-6" 
+          @click="setSearchType('food'), searchDish=false" 
+          label="食材" 
+          icon="local_pizza"
+        />
+      </div>
     </div>
 
     <div class="q-pl-md row">
       <search style="max-width: 300px"/>
-
-      <q-btn
-        :disable="searchType=='dish'" 
-        color="blue-6"   
-        @click="setSearchType('dish')" 
-        label="料理" 
-        icon="restaurant"
-      />
-
-      <q-btn 
-        :disable="searchType=='food' || showFood" 
-        color="blue-6" 
-        @click="setSearchType('food')" 
-        label="食材" 
-        icon="local_pizza"
-      />
 
       <div 
         v-show="searchType=='dish' && showFood" 
@@ -44,7 +50,7 @@
       </div>
     </div>
 
-    <q-card class="my-card text-white full-width" style="background: radial-gradient(circle, #ffffff 0%, #eeffe6 80%)">   
+    <q-card class="my-card text-white full-width">   
       <dish-table 
         v-show="search && searchType=='dish'"
         :showFood.sync="showFood"
@@ -56,7 +62,7 @@
       <!-- 根據料理編輯 -->
 
       <hr v-if="showFood">
-      <food-table v-if="(search && searchType=='food') || showFood"/>
+      <food-table v-if="searchType=='food' || showFood"/>
 
       <hr v-if="showRecipe && showFood">
       <recipe-table v-if="showRecipe && showFood" class="col"/>
@@ -73,7 +79,8 @@ export default {
   data() {
     return {
       showFood: false,
-      showRecipe: false
+      showRecipe: false,
+      searchDish: true
     }
   },
   computed: {

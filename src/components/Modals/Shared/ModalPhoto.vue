@@ -1,7 +1,7 @@
 <template>
   <div class="q-gutter-sm row">
     <photo-upload
-      v-show="!uploadSuccess"
+      v-show="!uploaded"
       label="Custom header"
       ref="upload"
     >
@@ -11,9 +11,10 @@
           v-if="scope.canAddFiles" 
           dense 
           flat 
-          icon="add"
+          icon="perm_media"
           class="text-left upload"
           style="width:100%;border-radius:0px;height:60px"
+          @click="$emit('haveFile')"
         >
           <q-uploader-add-trigger/>
           <div class="q-uploader__title" style="padding:10px">
@@ -26,13 +27,13 @@
           dense 
           flat 
           icon="cloud_upload"
-          style="width:100%;border-radius:0px"
-          @click="$refs.upload.upload(label.type), uploadSuccess=true"
+          style="width:100%"
+          @click="$refs.upload.upload(label.type), uploaded=true"
         />
       </template>
     </photo-upload>
     <q-icon 
-      v-show="uploadSuccess"
+      v-show="uploaded"
       name="check_circle"
       class="text-primary" style="font-size: 80px;" />
   </div>
@@ -43,7 +44,7 @@ export default {
   props: ['label'],
   data() {
     return {
-      uploadSuccess: false
+      uploaded: false
     }
   },
   components: {

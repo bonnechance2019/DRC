@@ -45,7 +45,8 @@
             class="q-pa-md"
             style="padding-left: 100px" 
             ref="modalPhoto"
-            :label="label" />	
+            :label="label"
+          />	
         </div>
       </q-card-section>
 
@@ -75,6 +76,7 @@
     <form @submit.prevent="submitForm"> 
       <modal-buttons :label="label.save" />
     </form>
+
     <!-- <q-btn @click="test()" /> -->
     <!-- <pre>{{ dishToSubmit }}</pre> -->
     <!-- Check the value when it change -->

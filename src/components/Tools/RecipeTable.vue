@@ -5,7 +5,7 @@
       title="食譜"
       v-for="(recipe, id) in recipe"
       :key="id"
-      style="max-width:300px;color:black;"
+      style="max-width:300px;background: radial-gradient(circle, #35a2ff 0%, #3366ff 100%)"
     >
       <img :src="photo()" />
 

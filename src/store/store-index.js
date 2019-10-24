@@ -9,7 +9,7 @@ const state = {
           name: 'name',
           required: true,
           label: '名稱',
-          align: 'left',
+          align: 'center',
           field: row => row.name,
           format: val => `${val}`,
           sortable: true
@@ -17,16 +17,16 @@ const state = {
         { name: 'restaurant_id', align: 'left', label: '餐廳', field: 'restaurant_id' },
         { name: 'dish_photo', align: 'center', label: '照片', field: 'dish_photo' },
         
+        { name: 'grains', label: '全穀根莖類 (份)', field: 'grains' },
+        { name: 'meat_and_beans', label: '蛋豆魚肉類 (份)', field: 'meat_and_beans' },
+        { name: 'vegetables', label: '蔬菜類 (份)', field: 'vegetables' },
+        { name: 'fruits', label: '水果類 (份)', field: 'fruits' },
+        { name: 'dairy', label: '乳品類 (份)', field: 'dairy' },
+        { name: 'oils', label: '油脂與堅果種子類 (份)', field: 'oils' },
         { name: 'calories', label: '熱量 (kcal)', field: 'calories', sortable: true },
+        { name: 'protein', label: '蛋白質 (g)', field: 'protein', sortable: true },
         { name: 'fat', label: '脂肪 (g)', field: 'fat', sortable: true },
         { name: 'carbs', label: '糖類 (g)', field: 'carbs', sortable: true },
-        { name: 'protein', label: '蛋白質 (g)', field: 'protein', sortable: true },
-        { name: 'grains', label: '全穀根莖類 (份)', field: 'grains' },
-        { name: 'fruits', label: '水果類 (份)', field: 'fruits' },
-        { name: 'vegetables', label: '蔬菜類 (份)', field: 'vegetables' },
-        { name: 'oils', label: '油脂與堅果種子類 (份)', field: 'oils' },
-        { name: 'dairy', label: '乳品類 (份)', field: 'dairy' },
-        { name: 'meat_and_beans', label: '蛋豆魚肉類 (份)', field: 'meat_and_beans' },
         { name: 'dietary_fiber', label: '膳食纖維 (g)', field: 'dietary_fiber', sortable: true },
         { name: 'total_sugar', label: '糖質總量 (g)', field: 'total_sugar', sortable: true },
         { name: 'sodium', label: '鈉 (mg)', field: 'sodium', sortable: true },
@@ -41,11 +41,11 @@ const state = {
         { name: 'vitaminE', label: 'a-維生素E (mg)', field: 'vitaminE', sortable: true },
         { name: 'vitaminB1', label: '維生素B1 (mg)', field: 'vitaminB1', sortable: true },
         { name: 'vitaminB2', label: '維生素B2 (mg)', field: 'vitaminB2', sortable: true },
+        { name: 'nicotin', label: '菸鹼素 (mg)', field: 'nicotin', sortable: true },
         { name: 'vitaminB6', label: '維生素B6 (mg)', field: 'vitaminB6', sortable: true },
         { name: 'vitaminB12', label: '維生素B12 (mg)', field: 'vitaminB12', sortable: true },
-        { name: 'vitaminC', label: '維生素C (mg)', field: 'vitaminC', sortable: true },
-        { name: 'nicotin', label: '菸鹼素 (mg)', field: 'nicotin', sortable: true },
         { name: 'folic_acid', label: '葉酸 (ug)', field: 'folic_acid', sortable: true },
+        { name: 'vitaminC', label: '維生素C (mg)', field: 'vitaminC', sortable: true },
         { name: 'fatty_acidS', label: '脂肪酸S (mg)', field: 'fatty_acidS', sortable: true },
         { name: 'fatty_acidM', label: '脂肪酸M (mg)', field: 'fatty_acidM', sortable: true },
         { name: 'fatty_acidP', label: '脂肪酸P (mg)', field: 'fatty_acidP', sortable: true },
@@ -55,23 +55,23 @@ const state = {
         {
           name: 'name',
           required: true,
-          label: '名稱',
-          align: 'right',
+          label: '名稱(100g serving)',
+          align: 'center',
           field: row => row.name,
           format: val => `${val}`,
           sortable: true
         },
         { name: 'quantity', label: '份量 (g)', field: 'quantity', sortable: true },
+        { name: 'grains', label: '全穀根莖類 (份)', field: 'grains' },
+        { name: 'meat_and_beans', label: '蛋豆魚肉類 (份)', field: 'meat_and_beans' },
+        { name: 'vegetables', label: '蔬菜類 (份)', field: 'vegetables' },
+        { name: 'fruits', label: '水果類 (份)', field: 'fruits' },
+        { name: 'dairy', label: '乳品類 (份)', field: 'dairy' },
+        { name: 'oils', label: '油脂與堅果種子類 (份)', field: 'oils' },
         { name: 'calories', label: '熱量 (kcal)', field: 'calories', sortable: true },
+        { name: 'protein', label: '蛋白質 (g)', field: 'protein', sortable: true },
         { name: 'fat', label: '脂肪 (g)', field: 'fat', sortable: true },
         { name: 'carbs', label: '糖類 (g)', field: 'carbs', sortable: true },
-        { name: 'protein', label: '蛋白質 (g)', field: 'protein', sortable: true },
-        { name: 'grains', label: '全穀根莖類 (份)', field: 'grains' },
-        { name: 'fruits', label: '水果類 (份)', field: 'fruits' },
-        { name: 'vegetables', label: '蔬菜類 (份)', field: 'vegetables' },
-        { name: 'oils', label: '油脂與堅果種子類 (份)', field: 'oils' },
-        { name: 'dairy', label: '乳品類 (份)', field: 'dairy' },
-        { name: 'meat_and_beans', label: '蛋豆魚肉類 (份)', field: 'meat_and_beans' },
         { name: 'dietary_fiber', label: '膳食纖維 (g)', field: 'dietary_fiber', sortable: true },
         { name: 'total_sugar', label: '糖質總量 (g)', field: 'total_sugar', sortable: true },
         { name: 'sodium', label: '鈉 (mg)', field: 'sodium', sortable: true },
@@ -86,11 +86,11 @@ const state = {
         { name: 'vitaminE', label: 'a-維生素E (mg)', field: 'vitaminE', sortable: true },
         { name: 'vitaminB1', label: '維生素B1 (mg)', field: 'vitaminB1', sortable: true },
         { name: 'vitaminB2', label: '維生素B2 (mg)', field: 'vitaminB2', sortable: true },
+        { name: 'nicotin', label: '菸鹼素 (mg)', field: 'nicotin', sortable: true },
         { name: 'vitaminB6', label: '維生素B6 (mg)', field: 'vitaminB6', sortable: true },
         { name: 'vitaminB12', label: '維生素B12 (mg)', field: 'vitaminB12', sortable: true },
-        { name: 'vitaminC', label: '維生素C (mg)', field: 'vitaminC', sortable: true },
-        { name: 'nicotin', label: '菸鹼素 (mg)', field: 'nicotin', sortable: true },
         { name: 'folic_acid', label: '葉酸 (ug)', field: 'folic_acid', sortable: true },
+        { name: 'vitaminC', label: '維生素C (mg)', field: 'vitaminC', sortable: true },
         { name: 'fatty_acidS', label: '脂肪酸S (mg)', field: 'fatty_acidS', sortable: true },
         { name: 'fatty_acidM', label: '脂肪酸M (mg)', field: 'fatty_acidM', sortable: true },
         { name: 'fatty_acidP', label: '脂肪酸P (mg)', field: 'fatty_acidP', sortable: true },
@@ -143,7 +143,7 @@ const state = {
         // {
             // id: '3',
             // name: '蛋',
-            // quantity: 10,
+            // quantity: 1,
             // calories: 10,
             // fat: 10,
             // protein: 10,
@@ -208,7 +208,7 @@ const state = {
     dish_photo:'無',
     recipe_photo: '無',
     search: '', //開發預設
-    searchType: '',
+    searchType: 'dish',
     select: ''
 }
 
@@ -249,6 +249,14 @@ const mutations = {
     },
     addRecipePhoto(state, url) {
         state.recipe_photo = url
+    },
+
+    updateFood(state, payload) {
+        for (let i = 0; i < state.food.length; i++) {
+            if (state.food[i].id == payload.id) {
+                Object.assign(state.food[i], payload)
+            }
+        }
     }
 }
 
@@ -299,18 +307,35 @@ const actions = {
         }
     },
 
+    updateSix({dispatch}, payload) {
+        dispatch('fbUpdateSix', payload)
+    },
+
     fbReadData({ commit }) {
         // let userId = firebaseAuth.currentUser.uid
         let db = firebase.firestore()
         
-        // initial get foods form firestore
-        db.collection('foods').get().then(snapshot => {
-            snapshot.forEach((doc) => {
-                commit('addFood', doc.data())
-            })
-        })
+        // // initial get foods form firestore
+        // db.collection('foods').get().then(snapshot => {
+        //     snapshot.forEach((doc) => {
+        //         commit('addFood', doc.data())
+        //     })
+        // })
         
         // listen realtime update and handle data
+        db.collection("foods").onSnapshot(function(snapshot) {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === "added") {
+                    commit('addFood', change.doc.data())
+                }
+                if (change.type === "modified") {
+                    commit('updateFood', change.doc.data())
+                }
+                // if (change.type === "removed") {
+                    
+                // }
+            })
+        })
         db.collection("dishs").onSnapshot(function(snapshot) {
             snapshot.docChanges().forEach(change => {
                 if (change.type === "added") {
@@ -392,21 +417,25 @@ const actions = {
         });
     },
 
-    // fbUpdateDish({}, payload) {
-    //     let userId = firebaseAuth.currentUser.uid
-    //     let taskRef = firebaseData.ref('tasks/' + userId + '/' + payload.id)
-    //     taskRef.update(payload.updates, error => {
-    //         if (error) {
-    //             showError(error.message)
-    //         }
-    //         else {
-    //             let key = Object.keys(payload.updates)
-    //             // console.log(key)
-    //             if (!(key == 'completed' && key.length == 1)) // todo 完成則長度為1，更改 todo 則長度為4
-    //             Notify.create('Task updated!')
-    //         }
-    //     })
-    // }
+    fbUpdateSix({}, payload) {
+        // let userId = firebaseAuth.currentUser.uid
+        let foodRef = firebase.firestore().collection("foods")
+
+        foodRef.get().then(snapshot => {
+            snapshot.forEach((doc) => {
+                if (doc.data().id == payload.id) {
+                   foodRef.doc(doc.id).update({
+                        grains: payload.grains,
+                        fruits: payload.fruits,
+                        vegetables: payload.vegetables,
+                        oils: payload.oils,
+                        dairy: payload.dairy,
+                        meat_and_beans: payload.meat_and_beans
+                   })
+                }
+            })
+        })
+    },
 }
 
 const getters = {

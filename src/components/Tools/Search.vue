@@ -4,7 +4,7 @@
     @keyup.esc="searchField = ''"
     outlined
     v-select-all
-    class="col"
+    class="col bg-grey-1"
     label="Search"
   >
     <template v-slot:append>

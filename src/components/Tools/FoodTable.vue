@@ -1,22 +1,81 @@
 <template>
-  <q-table
-    v-if="searchType == 'dishAdd'"
-    title="食材"
-    :data="foodList"
-    :columns="food_nutrient"
-    row-key="id"
-    class="sticky-header-column-table"
-    card-class="bg-amber-2"
-  /> 
-  <q-table
-    v-else
-    title="食材"
-    :data="food"
-    :columns="food_nutrient"
-    row-key="id"
-    class="sticky-header-column-table"
-    card-class="bg-amber-2"
-  />
+  <div>
+    <q-table
+      v-if="searchType == 'dishAdd'"
+      title="食材"
+      :data="foodList"
+      :columns="food_nutrient"
+      row-key="id"
+      class="sticky-header-column-table"
+    /> 
+    <q-table
+      v-else
+      title="食材"
+      :data="food"
+      :columns="food_nutrient"
+      row-key="id"
+      class="sticky-header-column-table"
+    >
+      <template v-slot:body-cell-name="props">
+        <q-td key="name" :props="props">
+          <q-btn flat @click="editFood(props.row)" :disable="searchType == 'dish'">
+            {{ props.row.name }}
+          </q-btn>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-grains="props">  
+        <q-td key="grains" :props="props">
+          <q-badge color="amber">
+            {{ props.row.grains }}
+          </q-badge>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-fruits="props">  
+        <q-td key="fruits" :props="props">
+          <q-badge color="orange">
+            {{ props.row.fruits }}
+          </q-badge>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-vegetables="props">  
+        <q-td key="vegetables" :props="props">
+          <q-badge color="positive">
+            {{ props.row.vegetables }}
+          </q-badge>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-oils="props">  
+        <q-td key="oils" :props="props">
+          <q-badge color="negative">
+            {{ props.row.oils }}
+          </q-badge>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-dairy="props">  
+        <q-td key="dairy" :props="props">
+          <q-badge color="info">
+            {{ props.row.dairy }}
+          </q-badge>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-meat_and_beans="props">  
+        <q-td key="meat_and_beans" :props="props">
+          <q-badge color="accent">
+            {{ props.row.meat_and_beans }}
+          </q-badge>
+        </q-td>
+      </template>
+    </q-table>
+
+    <q-dialog v-model="showEditFood">
+      <edit-six :foodToEdit="foodToEdit" @close="showEditFood=false"/>
+    </q-dialog>
+  </div>
 </template>
 
 <script>
@@ -26,7 +85,9 @@ export default {
   props: ['containToSubmit', 'dishToSubmit'],
   data() {
     return {
-      foodList: []
+      foodList: [],
+      showEditFood: false,
+      foodToEdit: ''
     }
   },
   computed: {
@@ -34,6 +95,10 @@ export default {
     ...mapGetters('index', ['food'])
   },
   methods: {
+    editFood(food) {
+      this.showEditFood = true
+      this.foodToEdit = Object.assign({}, food)
+    },
     getFood(value) {
       let Food = [],
           totalNutrient = { 
@@ -130,6 +195,9 @@ export default {
       return Food
     }
   },
+  components: {
+    'edit-six': require('./EditSix.vue').default
+  },
   mounted() {
     dishAdd: {
       if (this.searchType == 'dishAdd') {
@@ -154,17 +222,20 @@ export default {
       max-height: 600px // 600px
 
     td:first-child /* bg color is important for td; just specify one */
-      background-color: $amber-2 !important
+      background-color: $amber-3 !important
 
     tr:first-child th
       position: sticky
       top: 0
       opacity: 1 /* opacity is important */
       z-index: 2 /* higher than z-index for td below */
-      background: $amber-2 /* bg color is important; just specify one */
+      color: $indigo-8
+      // font-size: 14px
+      // background: white /* bg color is important; just specify one */
 
     tr:first-child th:first-child
       z-index: 3 /* highest z-index */
+      background: white
 
     td:first-child
       z-index: 1
@@ -172,7 +243,4 @@ export default {
     td:first-child, th:first-child
       position: sticky
       left: 0
-
-  .q-table tbody td
-    font-size: 14px
 </style>
