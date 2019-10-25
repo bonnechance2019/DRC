@@ -17,12 +17,17 @@ const state = {
         { name: 'restaurant_id', align: 'left', label: '餐廳', field: 'restaurant_id' },
         { name: 'dish_photo', align: 'center', label: '照片', field: 'dish_photo' },
         
-        { name: 'grains', label: '全穀根莖類 (份)', field: 'grains' },
-        { name: 'meat_and_beans', label: '蛋豆魚肉類 (份)', field: 'meat_and_beans' },
-        { name: 'vegetables', label: '蔬菜類 (份)', field: 'vegetables' },
-        { name: 'fruits', label: '水果類 (份)', field: 'fruits' },
-        { name: 'dairy', label: '乳品類 (份)', field: 'dairy' },
-        { name: 'oils', label: '油脂與堅果種子類 (份)', field: 'oils' },
+        { name: 'grains', label: '全穀雜糧類', field: 'grains' },
+        { name: 'meat_low', label: '蛋豆魚肉類（低脂）', field: 'meat_low' },
+        { name: 'meat_med', label: '蛋豆魚肉類（中脂）', field: 'meat_med' },
+        { name: 'meat_high', label: '蛋豆魚肉類（高脂）', field: 'meat_high' },
+        { name: 'meat_max', label: '蛋豆魚肉類（超高脂）', field: 'meat_max' },
+        { name: 'vegetables', label: '蔬菜類', field: 'vegetables' },
+        { name: 'fruits', label: '水果類', field: 'fruits' },
+        { name: 'dairy_all', label: '乳品類（全脂）', field: 'dairy_all' },
+        { name: 'dairy_low', label: '乳品類（低脂）', field: 'dairy_low' },
+        { name: 'dairy_de', label: '乳品類（脫脂）', field: 'dairy_de' },
+        { name: 'oils', label: '油脂與堅果種子類', field: 'oils' },
         { name: 'calories', label: '熱量 (kcal)', field: 'calories', sortable: true },
         { name: 'protein', label: '蛋白質 (g)', field: 'protein', sortable: true },
         { name: 'fat', label: '脂肪 (g)', field: 'fat', sortable: true },
@@ -55,19 +60,26 @@ const state = {
         {
           name: 'name',
           required: true,
-          label: '名稱(100g serving)',
+          label: '名稱',
           align: 'center',
           field: row => row.name,
           format: val => `${val}`,
           sortable: true
         },
-        { name: 'quantity', label: '份量 (g)', field: 'quantity', sortable: true },
-        { name: 'grains', label: '全穀根莖類 (份)', field: 'grains' },
-        { name: 'meat_and_beans', label: '蛋豆魚肉類 (份)', field: 'meat_and_beans' },
-        { name: 'vegetables', label: '蔬菜類 (份)', field: 'vegetables' },
-        { name: 'fruits', label: '水果類 (份)', field: 'fruits' },
-        { name: 'dairy', label: '乳品類 (份)', field: 'dairy' },
-        { name: 'oils', label: '油脂與堅果種子類 (份)', field: 'oils' },
+
+        { name: 'quantity', label: '份量 (100g)', field: 'quantity', sortable: true },
+        { name: 'trash', label: '廢棄率 (%)', field: 'trash', sortable: true },
+        { name: 'grains', label: '全穀雜糧類', field: 'grains' },
+        { name: 'meat_low', label: '蛋豆魚肉類（低脂）', field: 'meat_low' },
+        { name: 'meat_med', label: '蛋豆魚肉類（中脂）', field: 'meat_med' },
+        { name: 'meat_high', label: '蛋豆魚肉類（高脂）', field: 'meat_high' },
+        { name: 'meat_max', label: '蛋豆魚肉類（超高脂）', field: 'meat_max' },
+        { name: 'vegetables', label: '蔬菜類', field: 'vegetables' },
+        { name: 'fruits', label: '水果類', field: 'fruits' },
+        { name: 'dairy_all', label: '乳品類（全脂）', field: 'dairy_all' },
+        { name: 'dairy_low', label: '乳品類（低脂）', field: 'dairy_low' },
+        { name: 'dairy_de', label: '乳品類（脫脂）', field: 'dairy_de' },
+        { name: 'oils', label: '油脂與堅果類', field: 'oils' },
         { name: 'calories', label: '熱量 (kcal)', field: 'calories', sortable: true },
         { name: 'protein', label: '蛋白質 (g)', field: 'protein', sortable: true },
         { name: 'fat', label: '脂肪 (g)', field: 'fat', sortable: true },
@@ -111,8 +123,13 @@ const state = {
         //     fruits: 125,
         //     vegetables: 125,
         //     oils: 125,
-        //     dairy: 125,
-        //     meat_and_beans: 125,
+        //     dairy_all: 10,(8<=x)
+            // dairy_low: 10,(1<x<8)
+            // dairy_de: 10, (x<=1)
+            // meat_low: 10,
+            // meat_med: 10,
+            // meat_high: 10,
+            // meat_max: 10,
         //     dietary_fiber: 125,
         //     total_sugar: 125,
         //     sodium: 125,
@@ -143,6 +160,8 @@ const state = {
         // {
             // id: '3',
             // name: '蛋',
+            // description:'怎麼做怎麼幹' （用tooplist顯示）
+            // trash: 10(%)
             // quantity: 1,
             // calories: 10,
             // fat: 10,
@@ -152,8 +171,13 @@ const state = {
             // fruits: 10,
             // vegetables: 10,
             // oils: 10,
-            // dairy: 10,
-            // meat_and_beans: 10,
+            // dairy_all: 10,(8<=x)
+            // dairy_low: 10,(1<x<8)
+            // dairy_de: 10, (x<=1)
+            // meat_low: 10, (x<4)
+            // meat_med: 10, (4<=x<9)
+            // meat_high: 10, (9<=x<=11)
+            // meat_max: 10, (11<x)
             // dietary_fiber: 10,
             // total_sugar: 10,
             // sodium: 10,
@@ -429,8 +453,27 @@ const actions = {
                         fruits: payload.fruits,
                         vegetables: payload.vegetables,
                         oils: payload.oils,
-                        dairy: payload.dairy,
-                        meat_and_beans: payload.meat_and_beans
+                        dairy_all: payload.dairy_all,
+                        dairy_low: payload.dairy_low,
+                        dairy_de: payload.dairy_de,
+                        meat_low: payload.meat_low,
+                        meat_med: payload.meat_med,
+                        meat_high: payload.meat_high,
+                        meat_max: payload.meat_max
+                   })
+                }
+            })
+        })
+    },
+    fbUpdateDish({}, payload) {
+        // let userId = firebaseAuth.currentUser.uid
+        let dishRef = firebase.firestore().collection("dishs")
+
+        dishRef.get().then(snapshot => {
+            snapshot.forEach((doc) => {
+                if (doc.data().id == payload.id) {
+                    dishRef.doc(doc.id).update({
+    
                    })
                 }
             })
@@ -460,7 +503,7 @@ const getters = {
     foodMakeDish: (state, getters) => {
         let contain = state.contain,
             foodMakeDish = [],
-            totalNutrient = { 
+            totalNutrient = {   // 總和的欄位
                 name: '總和', 
                 quantity: 0,
                 calories: 0,
@@ -471,8 +514,13 @@ const getters = {
                 fruits: 0,
                 vegetables: 0,
                 oils: 0,
-                dairy: 0,
-                meat_and_beans: 0,
+                dairy_all: 0,
+                dairy_low: 0,
+                dairy_de: 0,
+                meat_low: 0,
+                meat_med: 0,
+                meat_high: 0,
+                meat_max: 0,
                 dietary_fiber: 0,
                 total_sugar: 0,
                 sodium: 0,
@@ -520,7 +568,7 @@ const getters = {
                 }
             }
         }
-        for (i = 0; i < foodMakeDish.length; i++) {
+        for (i = 0; i < foodMakeDish.length; i++) { // 將值加入總和
             totalNutrient.quantity += foodMakeDish[i].quantity
             totalNutrient.calories += foodMakeDish[i].calories
             totalNutrient.fat += foodMakeDish[i].fat
@@ -530,8 +578,13 @@ const getters = {
             totalNutrient.fruits += foodMakeDish[i].fruits
             totalNutrient.vegetables += foodMakeDish[i].vegetables
             totalNutrient.oils += foodMakeDish[i].oils
-            totalNutrient.dairy += foodMakeDish[i].dairy
-            totalNutrient.meat_and_beans += foodMakeDish[i].meat_and_beans
+            totalNutrient.dairy_all += foodMakeDish[i].dairy_all
+            totalNutrient.dairy_low += foodMakeDish[i].dairy_low
+            totalNutrient.dairy_de += foodMakeDish[i].dairy_de
+            totalNutrient.meat_low += foodMakeDish[i].meat_low
+            totalNutrient.meat_med += foodMakeDish[i].meat_med
+            totalNutrient.meat_high += foodMakeDish[i].meat_high
+            totalNutrient.meat_max += foodMakeDish[i].meat_max
             totalNutrient.dietary_fiber += foodMakeDish[i].dietary_fiber
             totalNutrient.total_sugar += foodMakeDish[i].total_sugar
             totalNutrient.sodium += foodMakeDish[i].sodium

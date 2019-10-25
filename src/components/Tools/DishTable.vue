@@ -79,18 +79,58 @@
       </q-td>
     </template>
 
-    <template v-slot:body-cell-dairy="props">  
-      <q-td key="dairy" :props="props">
-        <q-badge color="blue">
-          {{ props.row.dairy }}
+    <template v-slot:body-cell-dairy_all="props">  
+      <q-td key="dairy_all" :props="props">
+        <q-badge color="info">
+          {{ props.row.dairy_all }}
         </q-badge>
       </q-td>
     </template>
 
-    <template v-slot:body-cell-meat_and_beans="props">  
-      <q-td key="meat_and_beans" :props="props">
-        <q-badge color="purple">
-          {{ props.row.meat_and_beans }}
+    <template v-slot:body-cell-dairy_low="props">  
+      <q-td key="dairy_low" :props="props">
+        <q-badge color="info">
+          {{ props.row.dairy_low }}
+        </q-badge>
+      </q-td>
+    </template>
+
+      <template v-slot:body-cell-dairy_de="props">  
+      <q-td key="dairy_de" :props="props">
+        <q-badge color="info">
+          {{ props.row.dairy_de }}
+        </q-badge>
+      </q-td>
+    </template>
+
+    <template v-slot:body-cell-meat_low="props">  
+      <q-td key="meat_low" :props="props">
+        <q-badge color="accent">
+          {{ props.row.meat_low }}
+        </q-badge>
+      </q-td>
+    </template>
+
+    <template v-slot:body-cell-meat_med="props">  
+      <q-td key="meat_med" :props="props">
+        <q-badge color="accent">
+          {{ props.row.meat_med }}
+        </q-badge>
+      </q-td>
+    </template>
+
+    <template v-slot:body-cell-meat_high="props">  
+      <q-td key="meat_high" :props="props">
+        <q-badge color="accent">
+          {{ props.row.meat_high }}
+        </q-badge>
+      </q-td>
+    </template>
+
+    <template v-slot:body-cell-meat_max="props">  
+      <q-td key="meat_max" :props="props">
+        <q-badge color="accent">
+          {{ props.row.meat_max }}
         </q-badge>
       </q-td>
     </template>

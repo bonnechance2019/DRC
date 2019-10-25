@@ -1,23 +1,15 @@
 <template>
   <div>
     <q-table
-      v-if="searchType == 'dishAdd'"
       title="食材"
-      :data="foodList"
-      :columns="food_nutrient"
-      row-key="id"
-      class="sticky-header-column-table"
-    /> 
-    <q-table
-      v-else
-      title="食材"
-      :data="food"
+      :data="searchType == 'dishAdd' ? foodList : food"
       :columns="food_nutrient"
       row-key="id"
       class="sticky-header-column-table"
     >
       <template v-slot:body-cell-name="props">
         <q-td key="name" :props="props">
+          <q-tooltip>{{props.row.description}}</q-tooltip>
           <q-btn flat @click="editFood(props.row)" :disable="searchType == 'dish'">
             {{ props.row.name }}
           </q-btn>
@@ -55,18 +47,58 @@
         </q-td>
       </template>
 
-      <template v-slot:body-cell-dairy="props">  
-        <q-td key="dairy" :props="props">
+      <template v-slot:body-cell-dairy_all="props">  
+        <q-td key="dairy_all" :props="props">
           <q-badge color="info">
-            {{ props.row.dairy }}
+            {{ props.row.dairy_all }}
           </q-badge>
         </q-td>
       </template>
 
-      <template v-slot:body-cell-meat_and_beans="props">  
-        <q-td key="meat_and_beans" :props="props">
+       <template v-slot:body-cell-dairy_low="props">  
+        <q-td key="dairy_low" :props="props">
+          <q-badge color="info">
+            {{ props.row.dairy_low }}
+          </q-badge>
+        </q-td>
+      </template>
+
+       <template v-slot:body-cell-dairy_de="props">  
+        <q-td key="dairy_de" :props="props">
+          <q-badge color="info">
+            {{ props.row.dairy_de }}
+          </q-badge>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-meat_low="props">  
+        <q-td key="meat_low" :props="props">
           <q-badge color="accent">
-            {{ props.row.meat_and_beans }}
+            {{ props.row.meat_low }}
+          </q-badge>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-meat_med="props">  
+        <q-td key="meat_med" :props="props">
+          <q-badge color="accent">
+            {{ props.row.meat_med }}
+          </q-badge>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-meat_high="props">  
+        <q-td key="meat_high" :props="props">
+          <q-badge color="accent">
+            {{ props.row.meat_high }}
+          </q-badge>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-meat_max="props">  
+        <q-td key="meat_max" :props="props">
+          <q-badge color="accent">
+            {{ props.row.meat_max }}
           </q-badge>
         </q-td>
       </template>
@@ -101,7 +133,7 @@ export default {
     },
     getFood(value) {
       let Food = [],
-          totalNutrient = { 
+          totalNutrient = {   // 總和的欄位
               name: '總和', 
               quantity: 0,
               calories: 0,
@@ -112,8 +144,13 @@ export default {
               fruits: 0,
               vegetables: 0,
               oils: 0,
-              dairy: 0,
-              meat_and_beans: 0,
+              dairy_all: 0,
+              dairy_low: 0,
+              dairy_de: 0,
+              meat_low: 0,
+              meat_med: 0,
+              meat_high: 0,
+              meat_max: 0,
               dietary_fiber: 0,
               total_sugar: 0,
               sodium: 0,
@@ -155,7 +192,7 @@ export default {
           }
         }
       }
-      for (let i = 0; i < Food.length; i++) {
+      for (let i = 0; i < Food.length; i++) { // 將值加入總和
         totalNutrient.quantity += Food[i].quantity
         totalNutrient.calories += Food[i].calories
         totalNutrient.fat += Food[i].fat
@@ -165,8 +202,13 @@ export default {
         totalNutrient.fruits += Food[i].fruits
         totalNutrient.vegetables += Food[i].vegetables
         totalNutrient.oils += Food[i].oils
-        totalNutrient.dairy += Food[i].dairy
-        totalNutrient.meat_and_beans += Food[i].meat_and_beans
+        totalNutrient.dairy_all += Food[i].dairy_all
+        totalNutrient.dairy_low += Food[i].dairy_low
+        totalNutrient.dairy_de += Food[i].dairy_de
+        totalNutrient.meat_low += Food[i].meat_low
+        totalNutrient.meat_med += Food[i].meat_med
+        totalNutrient.meat_high += Food[i].meat_high
+        totalNutrient.meat_max += Food[i].meat_max
         totalNutrient.dietary_fiber += Food[i].dietary_fiber
         totalNutrient.total_sugar += Food[i].total_sugar
         totalNutrient.sodium += Food[i].sodium
@@ -210,6 +252,7 @@ export default {
       }
       else {
         this.foodList = this.food
+        console.log(this.foodList)
       }
     }
   },

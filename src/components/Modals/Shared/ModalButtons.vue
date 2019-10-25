@@ -4,7 +4,7 @@
       :icon="icon" 
       :label="label"
       type="submit"
-      color="blue-5"  
+      :color="color? color:'blue-5'"  
       style="width: 70px"
     />
   </q-card-actions>

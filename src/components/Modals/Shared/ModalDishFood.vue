@@ -22,7 +22,7 @@
         >
           <q-input
             dense
-            :label="dishFood.name"
+            :label="dishFood.name+'(幾百克)'"
             v-model="dishFood.quantity"
             type="text"
             @input="dishFood.quantity = handleFoodQuantityType(dishFood.quantity)"
@@ -48,13 +48,19 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import { fourPoint } from 'src/functions/four-point'
 
 export default {
   props: ['containToSubmit'],
   data() {
     return {
       newFood: true,
-      foodQuantity: []
+      foodQuantity: [
+        // {
+        //   food: '',
+        //   quantity: ''
+        // }
+      ]
     }
   },
   computed: {
@@ -64,14 +70,7 @@ export default {
   methods: {
     ...mapActions('index',['clearSearch', 'setSearchType']),
     handleFoodQuantityType(value) {
-      value = value.replace(/[^\d.]/g, '') //清除 ”數字“ ”.“ 以外的字符
-      value = value.replace(/\.{2,}/g, '.') //保留第一個 "." ，清除其他的
-      value = value.replace(".","$#$").replace(/\./g,"").replace("$#$",".")
-      value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/,'$1$2.$3') //只能輸入四個小數
-      if (value.indexOf('.') < 0 && value != '') { //如果沒有小數點，首位不能為0。ex:01, 02
-          value = parseFloat(value)
-      }
-      return value
+      return fourPoint(value)
     },
     handleContain() {
       for (let i = 0; i < this.foodQuantity.length; i++) {
@@ -87,7 +86,10 @@ export default {
           }
         }
         if (this.newFood && this.foodQuantity[i].quantity > 0) {
-          this.containToSubmit.push(this.foodQuantity[i])
+          this.containToSubmit.push({
+            food: this.foodQuantity[i].food,
+            quantity: this.foodQuantity[i].quantity
+          })
         }
         this.newFood = true
       }
