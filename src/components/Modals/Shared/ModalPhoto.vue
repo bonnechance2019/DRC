@@ -26,12 +26,14 @@
           v-if="scope.canUpload"
           dense 
           flat 
+          label="請先點擊上傳"
           icon="cloud_upload"
           style="width:100%"
-          @click="$refs.upload.upload(label.type), uploaded=true"
+          @click="$refs.upload.upload(label.type), uploaded=true" 
         />
       </template>
     </photo-upload>
+
     <q-icon 
       v-show="uploaded"
       name="check_circle"

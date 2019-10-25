@@ -9,7 +9,10 @@
     >
       <template v-slot:body-cell-name="props">
         <q-td key="name" :props="props">
-          <q-tooltip>{{props.row.description}}</q-tooltip>
+          <q-tooltip v-if="searchType != 'dish'">
+            {{props.row.description}}
+          </q-tooltip>
+          
           <q-btn flat @click="editFood(props.row)" :disable="searchType == 'dish'">
             {{ props.row.name }}
           </q-btn>
@@ -238,7 +241,7 @@ export default {
     }
   },
   components: {
-    'edit-six': require('./EditSix.vue').default
+    'edit-six': require('../Food/EditSix.vue').default
   },
   mounted() {
     dishAdd: {
@@ -252,7 +255,6 @@ export default {
       }
       else {
         this.foodList = this.food
-        console.log(this.foodList)
       }
     }
   },

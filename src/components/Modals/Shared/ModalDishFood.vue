@@ -1,20 +1,21 @@
 <template>
-  <q-card class="full-width full-height">  
+  <q-card class="full-width full-height bg-lime-2">  
     <form @submit.prevent="handleContain()">
-      <q-card-section class="q-pa-md">
-        <div class="row">
-          <search />
+      <q-card-section class="row q-pa-md">     
+        <search />
 
-          <q-btn 
-            flat
-            dense
-            v-close-popup 
-            icon="highlight_off"
-            size="17px"
-            @click="$emit('close'), clearSearch()"
-          />
-        </div>
+        <q-btn 
+          flat
+          dense
+          v-close-popup 
+          color="negative"
+          icon="highlight_off"
+          size="19px"
+          @click="$emit('close'), clearSearch()"
+        />
+      </q-card-section>
 
+      <q-card-section>
         <q-item
           v-for="dishFood in foodQuantity"
           :key="dishFood.id"
@@ -22,14 +23,21 @@
         >
           <q-input
             dense
-            :label="dishFood.name+'(幾百克)'"
+            label="(幾百克)"
             v-model="dishFood.quantity"
             type="text"
             @input="dishFood.quantity = handleFoodQuantityType(dishFood.quantity)"
-            style="max-width: 150px"
           >
+            <template v-slot:before>
+              <q-tooltip>{{ dishFood.description }}</q-tooltip>
+              <div style="font-size:20px" class="text-primary">
+                {{ dishFood.name }}
+              </div>
+            </template>
+
             <template v-slot:append>
               <q-icon 
+                v-show="dishFood.quantity"
                 name="close" 
                 @click="dishFood.quantity = 0" 
                 class="cursor-pointer" 
@@ -114,6 +122,7 @@ export default {
         this.foodQuantity.push({
           food: this.food[i].id,
           name: this.food[i].name,
+          description: this.food[i].description,
           quantity: 0
         })
       }
@@ -132,6 +141,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="sass">
+.q-item
+  .q-field
+    .q-field__inner
+      width: 100px 
 </style>

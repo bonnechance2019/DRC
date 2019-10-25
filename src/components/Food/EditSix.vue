@@ -155,9 +155,9 @@
     </div>
 
     <div class="row">
-    <form @submit.prevent="submitForm"> 
-      <modal-buttons class="q-pl-md" :label="'save'"/>
-		</form>
+      <form @submit.prevent="submitForm"> 
+        <modal-buttons class="q-pl-md" :label="'save'"/>
+      </form>
 
       <modal-buttons style="padding-left:360px" :label="'edit'" :color="'negative'" />
     </div>
