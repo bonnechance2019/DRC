@@ -10,14 +10,10 @@
 
     <div class="q-pa-md row">
       <q-btn  
-        @click="showFood = false, setSearch(''), setSearchType('')"
-        to="/dish"
-        round
+        @click="clear(), showAddDish=true"
         outline
-        class="all-pointer-events"
-        color="blue-4"
-        size="15px" 
-        icon="add" 
+        class="all-pointer-events bg-blue-4" 
+        icon="add"
       />
 
       <div style="padding-left:40px;padding-top:5px">
@@ -40,21 +36,24 @@
     </div>
 
     <div class="q-pl-md row">
-      <search style="max-width: 300px"/>
+      <search 
+        v-show="!showFood"
+        style="max-width: 300px"
+      />
 
       <div 
         v-show="searchType=='dish' && showFood" 
         class="q-pa-md row; text-amber-10"
       >
-        單獨查詢食材，須先取消勾選
+        如果要查詢其他項目，須先取消勾選
       </div>
     </div>
 
     <q-card class="my-card text-white full-width">   
       <dish-table 
         v-show="search && searchType=='dish'"
-        :showFood.sync="showFood"
-        :showRecipe.sync="showRecipe"
+        :showFood="showFood"
+        :showRecipe="showRecipe"
         @true="showFood=true"
         @false="showFood=false"
         @showRecipe="showRecipe=!showRecipe"
@@ -68,6 +67,10 @@
       <recipe-table v-if="showRecipe && showFood" class="col"/>
       
     </q-card>
+
+    <q-dialog v-model="showAddDish">
+      <add-dish @close="showAddDish=false" />
+    </q-dialog>
   </q-page>
 </template>
 
@@ -80,20 +83,22 @@ export default {
     return {
       showFood: false,
       showRecipe: false,
-      searchDish: true
+      searchDish: true,
+      showAddDish: false
     }
   },
   computed: {
     ...mapState('index', ['searchType', 'search'])
   },
   methods: {
-    ...mapActions('index', ['setSearchType', 'setSearch', 'fbReadData'])
+    ...mapActions('index', ['setSearchType', 'clearSearch', 'fbReadData', 'clear'])
   },
   components: {
     'search': require('src/components/Tools/Search.vue').default,
     'dish-table': require('src/components/Tools/DishTable.vue').default,
     'food-table': require('src/components/Tools/FoodTable.vue').default,
-    'recipe-table': require('src/components/Tools/RecipeTable.vue').default
+    'recipe-table': require('src/components/Tools/RecipeTable.vue').default,
+    'add-dish': require('src/components/Dish/Add.vue').default
   }
 }
 </script>

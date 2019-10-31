@@ -1,16 +1,9 @@
 <template>
-  <q-card class="my-card full-width bg-lime-2" >
+  <q-card 
+    class="my-card text-white full-width"
+    style="background: #F8F8FF"  
+  >
     <q-card-section class="text-right">
-      <q-icon 
-        name="notification_important"
-        class="text-negative "
-        style="font-size:30px"
-      />
-      <span 
-        class="text-negative" 
-        style="padding-right:100px"
-      >如果沒有要更改照片，則不須上傳</span>
-
       <q-btn 
         flat
         dense 
@@ -21,12 +14,11 @@
       />
     </q-card-section>
 
-    <q-card-section class="row" style="padding-left:130px">
-      <div>
+    <q-card-section class="row" style="padding-left: 130px">
+      <div class="q-pt-md">
         <modal-dish-name 
           :name.sync="dishToSubmit.name"
-          ref="modalDishName" 
-        />
+          ref="modalDishName" />
 
         <q-btn
           label="組成食材"
@@ -35,7 +27,7 @@
           :color="containError ? 'negative' : 'primary'"
           type="submit"
           size="16px"
-          @click="showDishFood=true, setSearchType(''), clearSearch()"
+          @click="showDishFood=true, setSearchType('')"
         />
       </div>
 
@@ -48,26 +40,24 @@
         />
       </q-dialog>
       
-      <div class="q-pt-md">
-        <!-- 舊圖會存在 -->
-        <modal-photo 
-          style="width:310px"
-          ref="modalPhoto" 
-          :label="label" 
-        />	
-      </div>
+      <modal-photo 
+        class="q-pt-md"
+        style="width:310px"
+        ref="modalPhoto"
+        :label="label"
+      />	
     </q-card-section>
 
     <q-card-section>
       <modal-dish-recipe 
         style="padding-left: 100px"
         ref="modalDishRecipe"
-        :recipe.sync="recipeToSubmit.text"
-      />
+        :recipe.sync="recipeToSubmit.text"/>	
     </q-card-section>
 
       <q-card-section class="q-pl-md" style="padding-left: 133px">
         <modal-dish-restaurant 
+          style="max-width: 300px;"
           :restaurant_id.sync="dishToSubmit.restaurant_id"
           @newRestaurant="newRestaurant=true"
           ref="modalDishRestaurant" />
@@ -75,19 +65,16 @@
 
     <div class="col q-pa-md" >
       <food-table
-        v-if="!showDishFood"
+        v-if="!showDishFood && containToSubmit.length"
         :containToSubmit="containToSubmit"
         :dishToSubmit="dishToSubmit" />
     </div>
-    
+
     <form @submit.prevent="submitForm"> 
       <modal-buttons :label="label.save" />
     </form>
-
-    <!-- <q-btn @click="test()" /> -->
-    <!-- <pre>{{ dishToSubmit }}</pre> -->
-    <!-- Check the value when it change -->
   </q-card>
+    
 </template>
 
 <script>
@@ -97,31 +84,77 @@ import { getFood } from 'src/functions/get-food'
 
 export default {
   mixins: [mixinAddEditDish],
-  props: ['dish'],
   data() {
     return {
       newRestaurant: false,
       label: {
         type: 'dishs',
         title: "料理的照片",
-        save: 'save'
+        save: "Save",
+        cancel: "back"
       },
       showDishFood: false,
       containError: false,
-      dishToSubmit: {},
+      dishToSubmit: {
+        name:'',
+        restaurant_id: '',
+        dish_photo: '',
+        calories: '',
+        fat: '',
+        protein: '',
+        carbs: '',
+        grains: '',
+        fruits: '',
+        vegetables: '',
+        oils: '',
+        dairy_all: 0,
+        dairy_low: 0,
+        dairy_de: 0,
+        meat_low: 0,
+        meat_med: 0,
+        meat_high: 0,
+        meat_max: 0,
+        dietary_fiber: '',
+        total_sugar: '',
+        sodium: '',
+        potassium: '',
+        calcium: '',
+        magnesium: '',
+        iron: '',
+        zinc: '',
+        phosphorus: '',
+        vitaminA: '',
+        vision_alcohol: '',
+        vitaminE: '',
+        vitaminB1: '',
+        vitaminB2: '',
+        vitaminB6: '',
+        vitaminB12: '',
+        vitaminC: '',
+        nicotin: '',
+        folic_acid: '',
+        fatty_acidS: '',
+        fatty_acidM: '',
+        fatty_acidP: '',
+        cholesterol: '',
+      },
       containToSubmit: [],
-      recipeToSubmit: '',
+      recipeToSubmit: {
+        // id: '',
+        dish: '',
+        photo: '',
+        text: '',
+      },
       foodList: []
     }
   },
   computed: {
-    ...mapState('index', ['select', 'dish_photo', 'recipe_photo']),
-    ...mapGetters('index', ['recipe', 'food', 'contain'])
+    ...mapState('index', ['dish', 'dish_id', 'dish_photo', 'recipe_photo']),
+    ...mapGetters('index', ['food'])
   },
-  methods: {
-    ...mapActions('index', ['clear', 'setSearch', 'setSearchType', 'setSelect', 'clearSearch', 'updateDish', 'deleteContain', 'addRecipe', 'updateRecipe', 'addRestaurant', 'addContain']),
-    submitDish() {
-      //  將營養素總和放入dish的營養素
+	methods: {
+    ...mapActions('index', ['clear', 'addDish', 'addContain', 'addRecipe', 'setSearchType', 'setSearch', 'addRestaurant']),
+		submitDish() {
       this.foodList = getFood(this.containToSubmit, this.food)
       Object.keys(this.dishToSubmit).forEach(key => {
         if (key != 'name' && key != 'restaurant_id' && key != 'dish_photo' && key != 'id') {
@@ -129,56 +162,30 @@ export default {
         }
       })
 
-      //  如有新增照片則更改網址
-      if (this.dish_photo != '無') {
-        this.dishToSubmit.dish_photo = this.dish_photo
-      }
-      if (this.recipe_photo != '無') {
-        this.recipeToSubmit.photo = this.recipe_photo
-      }
+      this.dishToSubmit.dish_photo = this.dish_photo
+      this.recipeToSubmit.photo = this.recipe_photo
 
-      //  更新dish
-      this.updateDish(this.dishToSubmit)
+      this.addDish(this.dishToSubmit)
 
-      // 如餐廳是新的則新增餐廳
       if (this.newRestaurant) {
         this.addRestaurant(this.dishToSubmit.restaurant_id)
       }
 
-      //  先將舊的包含dish的contain刪除，再放入新的
-      this.deleteContain(this.dishToSubmit.id)
       for (let i = 0; i < this.containToSubmit.length; i++) {
-        this.containToSubmit[i].dish = this.dishToSubmit.id
+        this.containToSubmit[i].dish = this.dish_id
       }
       this.addContain(this.containToSubmit)
 
-      //  如有食譜則更新舊食譜，或新增食譜
       if (this.recipeToSubmit.text) {
-        if (this.recipeToSubmit.id) {
-          this.updateRecipe(this.recipeToSubmit)
-        }
-        else {
-          this.recipeToSubmit.dish = this.dishToSubmit.id
-          this.addRecipe(this.recipeToSubmit)
-        }
+        this.recipeToSubmit.dish = this.dish_id
+        this.addRecipe(this.recipeToSubmit)
       }
 
       this.clear()
       this.setSearchType('dish')
       this.setSearch(this.dishToSubmit.name)
+
       this.$emit('close')
-    }
-  },
-  mounted() {
-    this.recipeToSubmit = Object.assign({}, this.recipe)
-    for (let i = 0; i < this.contain.length; i++) {
-      this.containToSubmit.push(Object.assign({}, this.contain[i])) 
-    }
-    for (let i = 0; i < this.dish.length; i++) {
-      if (this.dish[i].id == this.select) {
-        this.dishToSubmit = Object.assign({}, this.dish[i])
-        delete this.dishToSubmit.__index // this.dish會多出__index的屬性
-      }
     }
   },
   watch: {

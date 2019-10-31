@@ -16,7 +16,7 @@
       v-if="type == 'add'"
       outlined 
       :value="restaurant_id"
-      @input="$emit('update:restaurant_id', $event)"
+      @input="$emit('update:restaurant_id', $event), $emit('newRestaurant')"
       :rules="[val => !!val || 'Field is required']" 
       ref="restaurant_id"
       label="餐廳" 
@@ -36,7 +36,7 @@
       v-if="type == 'search'"
       filled
       :value="restaurant_id"
-      @input="$emit('update:restaurant_id', $event), $emit('oldRestaurant')"
+      @input="$emit('update:restaurant_id', $event)"
       :rules="[val => !!val || 'Field is required']" 
       ref="restaurant_id"
       label="餐廳" 

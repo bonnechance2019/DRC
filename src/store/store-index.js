@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { uid, Notify } from 'quasar'
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import { getFood } from '../functions/get-food';
 
 const state = {
     dish_nutrient: [
@@ -237,6 +238,14 @@ const state = {
 }
 
 const mutations = {
+    clear(state) {
+        state.dish_id = ''
+        state.dish_photo = '無'
+        state.recipe_photo = '無'
+        state.search = ''
+        state.searchType = ''
+        state.select = ''
+    },
     setSearch(state, value) {
         state.search = value
     },
@@ -249,6 +258,9 @@ const mutations = {
     setSearchType(state, value) {
         state.searchType = value
     },
+    setDishReadyToUpdate(state, value) {
+        state.dishReadyToUpdate = value
+    },
 
     addFood(state, payload) {
         state.food.push(payload)
@@ -256,8 +268,8 @@ const mutations = {
     addDish(state, payload) {
         state.dish.push(payload)
     },
-    setDishId(state, payload) {
-        state.dish_id = payload
+    setDishId(state, id) {
+        state.dish_id = id
     },
     addRestaurant(state, restaurant) {
         state.restaurant.push(restaurant)
@@ -281,10 +293,36 @@ const mutations = {
                 Object.assign(state.food[i], payload)
             }
         }
+    },
+    updateDish(state, payload) {
+        for (let i = 0; i < state.dish.length; i++) {
+            if (state.dish[i].id == payload.id) {
+                Object.assign(state.dish[i], payload)
+            }
+        }
+    },
+    updateRecipe(state, payload) {
+        for (let i = 0; i < state.recipe.length; i++) {
+            if (state.recipe[i].id == payload.id) {
+                Object.assign(state.recipe[i], payload)
+            }
+        }
+    },
+
+    deleteContain(state, payload) {
+        for (let i = 0; i < state.contain.length; i++) {
+            if (state.contain[i].dish == payload.dish) {
+                Vue.delete(state.contain, i)
+                i = state.contain.length
+            }
+        }
     }
 }
 
 const actions = {
+    clear({commit}) {
+        commit('clear')
+    },
     setSearch({commit}, value) {
         commit('setSearch', value)
     },
@@ -296,6 +334,9 @@ const actions = {
     }, 
     setSearchType({commit}, value) {
         commit('setSearchType', value)
+    },
+    setDishReadyToUpdate({commit}, value) {
+        commit('setDishReadyToUpdate', value)
     },
 
     addDish({commit, dispatch}, dish) {
@@ -334,6 +375,16 @@ const actions = {
     updateSix({dispatch}, payload) {
         dispatch('fbUpdateSix', payload)
     },
+    updateDish({dispatch}, payload) {
+        dispatch('fbUpdateDish', payload)
+    },
+    updateRecipe({dispatch}, payload) {
+        dispatch('fbUpdateRecipe', payload)
+    },
+
+    deleteContain({dispatch}, id) {
+        dispatch('fbDeleteContain', id)
+    },
 
     fbReadData({ commit }) {
         // let userId = firebaseAuth.currentUser.uid
@@ -365,9 +416,9 @@ const actions = {
                 if (change.type === "added") {
                     commit('addDish', change.doc.data())
                 }
-                // if (change.type === "modified") {
-                    
-                // }
+                if (change.type === "modified") {
+                    commit('updateDish', change.doc.data())
+                }
                 // if (change.type === "removed") {
                     
                 // }
@@ -385,12 +436,18 @@ const actions = {
                 if (change.type === "added") {
                     commit('addRecipe', change.doc.data())
                 }
+                if (change.type === "modified") {
+                    commit('updateRecipe', change.doc.data())
+                }
             })
         })
         db.collection("contains").onSnapshot(function(snapshot) {
             snapshot.docChanges().forEach(change => {
                 if (change.type === "added") {
                     commit('addContain', change.doc.data())
+                }
+                if (change.type === "removed") {
+                    commit('deleteContain', change.doc.data())
                 }
             })
         })
@@ -448,7 +505,7 @@ const actions = {
         foodRef.get().then(snapshot => {
             snapshot.forEach((doc) => {
                 if (doc.data().id == payload.id) {
-                   foodRef.doc(doc.id).update({
+                    foodRef.doc(doc.id).update({
                         grains: payload.grains,
                         fruits: payload.fruits,
                         vegetables: payload.vegetables,
@@ -460,7 +517,7 @@ const actions = {
                         meat_med: payload.meat_med,
                         meat_high: payload.meat_high,
                         meat_max: payload.meat_max
-                   })
+                    })
                 }
             })
         })
@@ -468,20 +525,53 @@ const actions = {
     fbUpdateDish({}, payload) {
         // let userId = firebaseAuth.currentUser.uid
         let dishRef = firebase.firestore().collection("dishs")
-
+            
         dishRef.get().then(snapshot => {
             snapshot.forEach((doc) => {
                 if (doc.data().id == payload.id) {
-                    dishRef.doc(doc.id).update({
-    
-                   })
+                    dishRef.doc(doc.id).update(payload)
                 }
             })
         })
     },
+    fbUpdateRecipe({}, payload) {
+        let recipeRef = firebase.firestore().collection("recipes")
+            
+        recipeRef.get().then(snapshot => {
+            snapshot.forEach((doc) => {
+                if (doc.data().id == payload.id) {
+                    recipeRef.doc(doc.id).update(payload)
+                }
+            })
+        })
+    },
+
+    fbDeleteContain({}, id) {
+        let containRef = firebase.firestore().collection("contains")
+
+        containRef.get().then(snapshot => {
+            snapshot.forEach((doc) => {
+                if (doc.data().dish == id) {
+                    containRef.doc(doc.id).delete()
+                }
+            })
+        })
+    }
 }
 
 const getters = {
+     /// dish的contain
+     contain: (state, getters) => {
+        let contain = []
+        for (let i = 0; i < state.contain.length; i++) {
+            if (state.contain[i].dish == state.select) {
+                contain.push(state.contain[i])
+            }
+        }
+        
+        return contain
+    },
+
     /// 料理
     dishFiltered: (state, getters) => {
         let dishFiltered = []
@@ -501,115 +591,8 @@ const getters = {
 
     /// 食材
     foodMakeDish: (state, getters) => {
-        let contain = state.contain,
-            foodMakeDish = [],
-            totalNutrient = {   // 總和的欄位
-                name: '總和', 
-                quantity: 0,
-                calories: 0,
-                fat: 0,
-                protein: 0,
-                carbs: 0,
-                grains: 0,
-                fruits: 0,
-                vegetables: 0,
-                oils: 0,
-                dairy_all: 0,
-                dairy_low: 0,
-                dairy_de: 0,
-                meat_low: 0,
-                meat_med: 0,
-                meat_high: 0,
-                meat_max: 0,
-                dietary_fiber: 0,
-                total_sugar: 0,
-                sodium: 0,
-                potassium: 0,
-                calcium: 0,
-                magnesium: 0,
-                iron: 0,
-                zinc: 0,
-                phosphorus: 0,
-                vitaminA: 0,
-                vision_alcohol: 0,
-                vitaminE: 0,
-                vitaminB1: 0,
-                vitaminB2: 0,
-                vitaminB6: 0,
-                vitaminB12: 0,
-                vitaminC: 0,
-                nicotin: 0,
-                folic_acid: 0,
-                fatty_acidS: 0,
-                fatty_acidM: 0,
-                fatty_acidP: 0,
-                cholesterol: 0,
-            },
-            i = 0,
-            j
-
-        for (i; i < contain.length; i++) {
-            if (contain[i].dish == state.select) {
-                for (j = 0; j < state.food.length; j++) {
-                    if (state.food[j].id == contain[i].food) {
-                        let temp = { id:'' } // 暫存組成料理的食材份量
-                        Object.keys(state.food[j]).forEach(key => {
-                            if (key == 'id' || key == 'name') {
-                                temp[key] = state.food[j][key] 
-                            }
-                            else {
-                                temp[key] = state.food[j][key]*contain[i].quantity
-                            }
-                        })
-                        
-                        foodMakeDish.push(temp)
-                        j = state.food.length  
-                    }
-                }
-            }
-        }
-        for (i = 0; i < foodMakeDish.length; i++) { // 將值加入總和
-            totalNutrient.quantity += foodMakeDish[i].quantity
-            totalNutrient.calories += foodMakeDish[i].calories
-            totalNutrient.fat += foodMakeDish[i].fat
-            totalNutrient.protein += foodMakeDish[i].protein
-            totalNutrient.carbs += foodMakeDish[i].carbs
-            totalNutrient.grains += foodMakeDish[i].grains
-            totalNutrient.fruits += foodMakeDish[i].fruits
-            totalNutrient.vegetables += foodMakeDish[i].vegetables
-            totalNutrient.oils += foodMakeDish[i].oils
-            totalNutrient.dairy_all += foodMakeDish[i].dairy_all
-            totalNutrient.dairy_low += foodMakeDish[i].dairy_low
-            totalNutrient.dairy_de += foodMakeDish[i].dairy_de
-            totalNutrient.meat_low += foodMakeDish[i].meat_low
-            totalNutrient.meat_med += foodMakeDish[i].meat_med
-            totalNutrient.meat_high += foodMakeDish[i].meat_high
-            totalNutrient.meat_max += foodMakeDish[i].meat_max
-            totalNutrient.dietary_fiber += foodMakeDish[i].dietary_fiber
-            totalNutrient.total_sugar += foodMakeDish[i].total_sugar
-            totalNutrient.sodium += foodMakeDish[i].sodium
-            totalNutrient.potassium += foodMakeDish[i].potassium
-            totalNutrient.calcium += foodMakeDish[i].calcium
-            totalNutrient.magnesium += foodMakeDish[i].magnesium
-            totalNutrient.iron += foodMakeDish[i].iron
-            totalNutrient.zinc += foodMakeDish[i].zinc
-            totalNutrient.phosphorus += foodMakeDish[i].phosphorus
-            totalNutrient.vitaminA += foodMakeDish[i].vitaminA
-            totalNutrient.vision_alcohol += foodMakeDish[i].vision_alcohol
-            totalNutrient.vitaminE += foodMakeDish[i].vitaminE
-            totalNutrient.vitaminB1 += foodMakeDish[i].vitaminB1
-            totalNutrient.vitaminB2 += foodMakeDish[i].vitaminB2
-            totalNutrient.vitaminB6 += foodMakeDish[i].vitaminB6
-            totalNutrient.vitaminB12 += foodMakeDish[i].vitaminB12
-            totalNutrient.vitaminC += foodMakeDish[i].vitaminC
-            totalNutrient.nicotin += foodMakeDish[i].nicotin
-            totalNutrient.folic_acid += foodMakeDish[i].folic_acid
-            totalNutrient.fatty_acidS += foodMakeDish[i].fatty_acidS
-            totalNutrient.fatty_acidM += foodMakeDish[i].fatty_acidM
-            totalNutrient.fatty_acidP += foodMakeDish[i].fatty_acidP
-            totalNutrient.cholesterol += foodMakeDish[i].cholesterol
-        }
-        foodMakeDish.push(totalNutrient)
+        let foodMakeDish
+        foodMakeDish = getFood(getters.contain, state.food)
         return foodMakeDish
     },
     foodFiltered: (state, getters) => {
@@ -632,20 +615,22 @@ const getters = {
 
     /// 食譜
     recipeMakeDish: (state, getters) => {
-        let recipeMakeDish = []
-        let i = 0
-        for (i; i < state.recipe.length; i++) {
+        let recipeMakeDish = {
+            id: '',
+            dish: '',
+            photo: '無',
+            text: '',
+        }
+
+        for (let i = 0; i < state.recipe.length; i++) {
             if (state.select == state.recipe[i].dish) {
-                recipeMakeDish.push(state.recipe[i])   
+                recipeMakeDish = state.recipe[i]   
             }
         }
         return recipeMakeDish
     },
     recipe: (state, getters) => {
-        if (state.select) {
-            return getters.recipeMakeDish
-        }
-        return ''
+        return getters.recipeMakeDish
     }
 }
 
@@ -656,3 +641,47 @@ export default {
     actions,
     getters,
 }
+
+// {
+//     name: payload.name,
+//     restaurant_id: payload.restaurant_id,
+//     dish_photo: payload.dish_photo,
+//     calories: payload.calories,
+//     fat: payload.fat,
+//     protein: payload.protein,
+//     carbs: payload.carbs,
+//     grains: payload.grains,
+//     fruits: payload.fruits,
+//     vegetables: payload.vegetables,
+//     oils: payload.oils,
+//     dairy_all: payload.dairy_all,
+//     dairy_low: payload.dairy_low,
+//     dairy_de: payload.dairy_de, 
+//     meat_low: payload.meat_low,
+//     meat_med: payload.meat_med,
+//     meat_high: payload.meat_high,
+//     meat_max: payload.meat_max,
+//     dietary_fiber: payload.dietary_fiber,
+//     total_sugar: payload.total_sugar,
+//     sodium: payload.sodium,
+//     potassium: payload.potassium,
+//     calcium: payload.calcium,
+//     magnesium: payload.magnesium,
+//     iron: payload.iron,
+//     zinc: payload.zinc,
+//     phosphorus: payload.phosphorus,
+//     vitaminA: payload.vitaminA,
+//     vision_alcohol: payload.vision_alcohol,
+//     vitaminE: payload.vitaminE,
+//     vitaminB1: payload.vitaminB1,
+//     vitaminB2: payload.vitaminB2,
+//     vitaminB6: payload.vitaminB6,
+//     vitaminB12: payload.vitaminB12,
+//     vitaminC: payload.vitaminC,
+//     nicotin: payload.nicotin,
+//     folic_acid: payload.folic_acid,
+//     fatty_acidS: payload.fatty_acidS,
+//     fatty_acidM: payload.fatty_acidM,
+//     fatty_acidP: payload.fatty_acidP,
+//     cholesterol: payload.cholesterol,
+// }

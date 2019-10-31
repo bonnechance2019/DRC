@@ -2,21 +2,18 @@
   <div class="row q-ma-md">
     <q-input
       filled
-      v-model="recipe.text"
+      :value="recipe"
+      @input="$emit('update:recipe', $event)"
       v-select-all
       type="textarea" 
       label="食譜"
       style="width: 300px" 
-      @input="$emit('update:recipe.text', $event)"
     />
-
-    <div class="q-pl-md">
-      <modal-photo 
-        style="padding-left: 85px"
-        ref="modalPhoto"
-        :label="label"
-      />
-    </div>
+    <modal-photo 
+      style="width: 310px"
+      ref="modalPhoto"
+      :label="label"
+    />
   </div>
 </template>
 
