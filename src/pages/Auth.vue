@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding style="background: #e6f9ff">
      <q-card class="auth-tabs">
         <q-tabs
           v-model="tab"
@@ -9,13 +9,13 @@
           indicator-color="primary"
           align="justify"
           narrow-indicator>
-          <q-tab name="login" label="Login" />
-          <q-tab name="register" label="Register" />
+          <q-tab name="login" label="登入" />
+          <q-tab name="register" label="註冊" />
         </q-tabs>
 
         <q-separator />
 
-        <!-- <q-tab-panels v-model="tab" animated>
+        <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="login">
             <login-register :tab="tab" />
           </q-tab-panel>
@@ -23,7 +23,7 @@
           <q-tab-panel name="register">
             <login-register :tab="tab" />
           </q-tab-panel>
-        </q-tab-panels> -->
+        </q-tab-panels>
       </q-card>
   </q-page>
 </template>
@@ -35,9 +35,9 @@ export default {
       tab: 'login'
     }
   },
-  // components: {
-  //   'login-register': require('components/Auth/LoginRegister.vue').default
-  // }
+  components: {
+    'login-register': require('src/components/Auth/LoginRegister.vue').default
+  }
 }
 </script>
 

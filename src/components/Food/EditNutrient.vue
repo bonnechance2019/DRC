@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card style="background: #F8F8FF">
     <q-card-section>
       <q-bar class="bg-red-5">
         <q-icon name="local_pizza" />

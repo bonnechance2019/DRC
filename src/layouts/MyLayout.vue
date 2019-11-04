@@ -15,43 +15,60 @@
         <q-toolbar-title>
           營養分析
         </q-toolbar-title>
+
+        <q-btn 
+          v-if="!loggedIn"
+          to="/auth"
+          icon-right="account_circle"
+          label="登入"
+          class="absolute-right"
+          flat />
+
+        <q-btn 
+          v-else 
+          icon-right="account_circle" 
+          label="登出" 
+          class="absolute-right"
+          flat
+          @click="logoutUser" />
       </q-toolbar>
     </q-header>
+
+    <q-footer class="bg-grey-2">
+      <q-tabs>
+        <q-route-tab
+          class="text-grey-7"
+          v-for="nav in navs"
+          :key="nav.label"
+          :to="nav.to"
+          :icon="nav.icon"
+          :label="nav.label"
+        />
+      </q-tabs>
+    </q-footer>
 
     <q-drawer
       v-model="leftDrawerOpen"
       bordered
+      :breakpoint="768"
+      :width="250"
       content-class="bg-grey-2"
     >
       <q-list>
-        <q-item-label header>功能</q-item-label>
-        <q-item clickable to='/'>
+        <q-item-label header class="text-primary">功能</q-item-label>
+        <q-item 
+          v-for="nav in navs"
+          :key="nav.label"
+          :to="nav.to"
+          class="text-grey-7"
+          exact
+          clickable
+        >
           <q-item-section avatar>
-            <q-icon name="public" />
+            <q-icon :name="nav.icon" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>查詢</q-item-label>
-            <q-item-label caption>Edit, Delete, Search</q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item clickable to='/auth'>
-          <q-item-section avatar>
-            <q-icon name="public" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>帳號</q-item-label>
-            <q-item-label caption>login, register</q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item clickable to='/settings'>
-          <q-item-section avatar>
-            <q-icon name="public" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>設定</q-item-label>
-            <q-item-label caption>顯示格式...</q-item-label>
+            <q-item-label>{{ nav.label }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -65,17 +82,34 @@
 
 <script>
 import { openURL } from 'quasar'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MyLayout',
   data () {
     return {
-      leftDrawerOpen: false
+      leftDrawerOpen: false,
+      navs: [
+        {
+          label: '首頁',
+          icon: 'view_list',
+          to: '/'
+        },
+        {
+          label: '設定',
+          icon: 'settings',
+          to: '/settings'
+        }
+      ]
     }
   },
+   computed: {
+    ...mapState('auth', ['loggedIn'])
+  },
   methods: {
+    ...mapActions('auth', ['logoutUser']),
     openURL
-  }
+  } 
 }
 </script>
 
@@ -86,6 +120,6 @@ export default {
     }
   }
   .q-router-link--exact-active {
-    color: rgb(70, 131, 201) !important;
+    color: rgb(13, 105, 224) !important;
   }
 </style>

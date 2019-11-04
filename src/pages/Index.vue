@@ -4,10 +4,6 @@
     :style="searchDish? 
     `background: #e6f9ff`:'background: #e6ffe6'"
   >
-
-    <!-- 測試讀取firebase -->
-    <q-btn @click="fbReadData()" />
-
     <div class="q-pa-md row">
       <q-btn  
         @click="clear(), showAddDish=true"

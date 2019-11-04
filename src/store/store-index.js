@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import { uid, Notify } from 'quasar'
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import { getFood } from '../functions/get-food';
+import firebase from 'firebase/app'
+import { getFood } from '../functions/get-food'
+import { showError } from 'src/functions/show-error'
 
 const state = {
     dish_nutrient: [
@@ -330,6 +330,13 @@ const mutations = {
         state.searchType = ''
         state.select = ''
     },
+    clearData(state) {
+        state.dish = []
+        state.food = []
+        state.restaurant = []
+        state.contain = []
+        state.recipe = []
+    },
     setSearch(state, value) {
         state.search = value
     },
@@ -491,13 +498,6 @@ const actions = {
                     commit('addFood', change.doc.data())
                 }
                 if (change.type === "modified") {
-                    Notify.create({
-                        color: 'blue-10',
-                        icon: 'done',
-                        message:'食材更新成功！',
-                        position: 'top',
-                        timeout: 500
-                    })
                     commit('updateFood', change.doc.data())
                 }
                 // if (change.type === "removed") {
@@ -508,23 +508,9 @@ const actions = {
         db.collection("dishs").onSnapshot(function(snapshot) {
             snapshot.docChanges().forEach(change => {
                 if (change.type === "added") {
-                    Notify.create({
-                        color: 'blue-10',
-                        icon: 'done',
-                        message:'料理新增成功！',
-                        position: 'top',
-                        timeout: 500
-                    })
                     commit('addDish', change.doc.data())
                 }
                 if (change.type === "modified") {
-                    Notify.create({
-                        color: 'blue-10',
-                        icon: 'done',
-                        message:'料理更新成功！',
-                        position: 'top',
-                        timeout: 500
-                    })
                     commit('updateDish', change.doc.data())
                 }
                 // if (change.type === "removed") {
@@ -566,10 +552,16 @@ const actions = {
         let dishRef = firebase.firestore().collection("dishs")
         dishRef.add(payload)
         .then(function() {
-            // Notify.create('添加成功！')
+            Notify.create({
+                color: 'blue-10',
+                icon: 'done',
+                message:'料理新增成功！',
+                position: 'top',
+                timeout: 500
+            })
         })
         .catch(function(error) {
-            console.error("Error adding dish: ", error);
+            showError(error.message)
         });
     },
     fbAddRestaurant({}, payload) {

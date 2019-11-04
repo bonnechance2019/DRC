@@ -7,7 +7,7 @@ module.exports = function (ctx) {
     // --> boot files are part of "main.js"
     boot: [
       'firebase',
-      
+      'router-auth'
     ],
 
     css: [
@@ -44,7 +44,10 @@ module.exports = function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'Dialog',
+        'Loading',
+        'LocalStorage'
       ]
     },
 
