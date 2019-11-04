@@ -7,9 +7,18 @@
       row-key="id"
       class="sticky-header-column-table"
     >
+      <template v-slot:top="props">
+        <q-th class="row">
+          <div style="font-size:22px" class="text-cyan-10 bg-white">
+          <q-icon name="local_pizza" size="25px" />
+            食材
+          </div>
+        </q-th>
+      </template>
+
       <template v-slot:body-cell-name="props">
         <q-td key="name" :props="props">
-          <q-tooltip v-if="searchType != 'dish'">
+          <q-tooltip>
             {{props.row.description}}
           </q-tooltip>
           
@@ -177,4 +186,13 @@ export default {
     td:first-child, th:first-child
       position: sticky
       left: 0
+
+  .q-table 
+    tbody 
+      td  
+        font-size: 14px
+
+  .q-badge
+    font-size: 14px
+    line-height: 20px
 </style>

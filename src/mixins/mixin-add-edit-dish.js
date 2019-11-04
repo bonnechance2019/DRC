@@ -23,6 +23,7 @@ export default {
         'modal-dish-restaurant': require('components/Modals/Shared/ModalDishRestaurant.vue').default,
         'modal-dish-food': require('components/Modals/Shared/ModalDishFood.vue').default,
         'modal-dish-recipe': require('components/Modals/Shared/ModalDishRecipe.vue').default,
+        'modal-dish-person': require('components/Modals/Shared/ModalDishPerson.vue').default,
         'food-table': require('src/components/Tools/FoodTable.vue').default
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-ma-md">
+  <div class="col q-pt-md" style="margin-left:45px">
     <q-input
       filled
       :value="recipe"
@@ -7,10 +7,11 @@
       v-select-all
       type="textarea" 
       label="食譜"
-      style="width: 300px" 
+      style="width:445px" 
+      class="bg-blue-grey-2"
     />
     <modal-photo 
-      style="width: 310px"
+      style="margin-top:5px"
       ref="modalPhoto"
       :label="label"
     />

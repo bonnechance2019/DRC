@@ -1,5 +1,5 @@
 <template>
-  <div class="q-gutter-sm row">
+  <div class="q-gutter-sm row" style="width:310px">
     <photo-upload
       v-show="!uploaded"
       label="Custom header"

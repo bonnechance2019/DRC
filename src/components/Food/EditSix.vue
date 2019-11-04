@@ -159,7 +159,13 @@
         <modal-buttons class="q-pl-md" :label="'save'"/>
       </form>
 
-      <modal-buttons style="padding-left:360px" :label="'edit'" :color="'negative'" />
+      <q-btn 
+        class="q-pa-sm"
+        style="margin-left:330px;margin-top:5px;height:40px" 
+        label="更改其他營養素" 
+        color="negative" 
+        @click="showEditNutrient=true"
+      />
     </div>
 
     <q-dialog v-model="error" persistent>
@@ -168,13 +174,16 @@
           <q-icon name="error" color="negative" style="font-size:40px"/>
           <span class="q-ml-sm text-red">請輸入值 或 只選六大類</span>
         </q-card-section>
+
         <q-card-actions align="right">
           <q-btn flat label="Ok~" color="primary" v-close-popup />
-          </q-card-actions>
+        </q-card-actions>
       </q-card>
     </q-dialog>
-			<!-- <pre>{{ taskToSubmit }}</pre> -->
-			<!-- Check the value when it change -->
+			
+    <q-dialog v-model="showEditNutrient" persistent>
+      <edit-nutrient :food="foodToEdit" @close="showEditNutrient=false, $emit('close')" />
+    </q-dialog>
   </q-card>
 </template>
 
@@ -193,7 +202,8 @@ export default {
       six: '',
       value: 0,
       sub: '',
-      error: false
+      error: false,
+      showEditNutrient: false
     }
   },
   methods: {
@@ -201,56 +211,59 @@ export default {
     handleValue(value) {
       return twoPoint(value)
     },
-    submitForm() {  
-      if (this.value == 0) {  // 未輸入則套用公式
-        if (this.six == 'grains') {  // 全穀雜糧公式
-         this.value = this.foodToEdit['carbs']/15
-        }
-        else if (this.six == 'vegetables') {  // 蔬菜公式
-          if (this.foodToEdit['carbs'] > 4) {
-            this.value = this.foodToEdit['carbs']/5
-          }
-          else {
-            this.value = 1
-          }
-        }
-        else if (this.six == 'oils') {  // 油脂
-          this.value = this.foodToEdit['fat']/5
-        }
-        else if (this.six == 'fruits') {  // 水果
-           this.value = this.foodToEdit['carbs']/15
-        }
-        else if (this.six == 'meat') {
-          this.value = this.foodToEdit['protein']/7
-          if (this.foodToEdit['fat'] > 11) {
-            this.six = 'meat_max'
-          }
-          else if (this.foodToEdit['fat'] >= 9) {
-            this.six = 'meat_high'
-          }
-          else if (this.foodToEdit['fat'] >= 4) {
-            this.six = 'meat_med'
-          }
-          else {
-            this.six = 'meat_low'
-          }
-        }
-        else if (this.six == 'dairy') {
-          this.value = this.foodToEdit['protein']/8
-          if (this.foodToEdit['fat'] >= 8) {
-            this.six = 'dairy_all'
-          }
-          else if (this.foodToEdit['fat'] <= 1) {
-            this.six = 'dairy_de'
-          }
-          else {
-            this.six = 'dairy_low'
-          }
+    sixFunctions() {
+      if (this.six == 'grains') {  // 全穀雜糧公式
+        this.value = this.foodToEdit['carbs']/15
+      }
+      else if (this.six == 'vegetables') {  // 蔬菜公式
+        if (this.foodToEdit['carbs'] > 4) {
+          this.value = this.foodToEdit['carbs']/5
         }
         else {
-          this.error = true
-          this.value = 0
+          this.value = 1
         }
+      }
+      else if (this.six == 'oils') {  // 油脂
+        this.value = this.foodToEdit['fat']/5
+      }
+      else if (this.six == 'fruits') {  // 水果
+          this.value = this.foodToEdit['carbs']/15
+      }
+      else if (this.six == 'meat') {
+        this.value = this.foodToEdit['protein']/7
+        if (this.foodToEdit['fat'] > 11) {
+          this.six = 'meat_max'
+        }
+        else if (this.foodToEdit['fat'] >= 9) {
+          this.six = 'meat_high'
+        }
+        else if (this.foodToEdit['fat'] >= 4) {
+          this.six = 'meat_med'
+        }
+        else {
+          this.six = 'meat_low'
+        }
+      }
+      else if (this.six == 'dairy') {
+        this.value = this.foodToEdit['protein']/8
+        if (this.foodToEdit['fat'] >= 8) {
+          this.six = 'dairy_all'
+        }
+        else if (this.foodToEdit['fat'] <= 1) {
+          this.six = 'dairy_de'
+        }
+        else {
+          this.six = 'dairy_low'
+        }
+      }
+      else {
+        this.error = true
+        this.value = 0
+      }
+    },
+    submitForm() {  
+      if (this.value == 0) {  // 未輸入則套用公式
+        this.sixFunctions()
       }
       
       if (!this.error) {
@@ -269,7 +282,8 @@ export default {
     }
   },
   components: {
-    'modal-buttons': require('../Modals/Shared/ModalButtons.vue').default 
+    'modal-buttons': require('src/components/Modals/Shared/ModalButtons.vue').default,
+    'edit-nutrient': require('./EditNutrient.vue').default
   }
 }
 </script>

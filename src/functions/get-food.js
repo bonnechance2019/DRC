@@ -47,7 +47,7 @@ export function getFood(value, food) {
             if (food[j].id == value[i].food) {
                 let temp = { id:'' }    // 暫存組成料理的食材份量
                 Object.keys(food[j]).forEach(key => { 
-                    if (key == 'id' || key == 'name' || key == 'trash') { 
+                    if (key == 'id' || key == 'name' || key == 'trash' || key == 'description') { 
                         temp[key] = food[j][key]    // 過濾不依賴份量的key
                     }
                     else {

@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <q-card class="my-card text-white full-width">   
+    <q-card class="my-card text-white full-width bg-blue-grey-4">   
       <dish-table 
         v-show="search && searchType=='dish'"
         :showFood="showFood"
@@ -58,12 +58,11 @@
         @false="showFood=false"
         @showRecipe="showRecipe=!showRecipe"
       />
-      <!-- 根據料理編輯 -->
 
-      <hr v-if="showFood">
+      <hr v-if="showFood" color="black">
       <food-table v-if="searchType=='food' || showFood"/>
 
-      <hr v-if="showRecipe && showFood">
+      <hr v-if="showRecipe && showFood" color="black">
       <recipe-table v-if="showRecipe && showFood" class="col"/>
       
     </q-card>

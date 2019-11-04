@@ -1,5 +1,5 @@
 <template>
-  <q-card class="my-card full-width bg-lime-2" >
+  <q-card class="my-card full-width" style="background: #F8F8FF">
     <q-card-section class="text-right">
       <q-icon 
         name="notification_important"
@@ -17,27 +17,38 @@
         color="negative"
         icon="highlight_off"
         size="19px"
-        @click="$emit('close'), setSearchType('dish')"
+        @click="$emit('close')"
       />
     </q-card-section>
 
-    <q-card-section class="row" style="padding-left:130px">
-      <div>
+    <q-card-section class="row" style="padding-left:60px">
         <modal-dish-name 
           :name.sync="dishToSubmit.name"
           ref="modalDishName" 
         />
 
-        <q-btn
-          label="組成食材"
-          icon="library_add"
-          outline
-          :color="containError ? 'negative' : 'primary'"
-          type="submit"
-          size="16px"
-          @click="showDishFood=true, setSearchType(''), clearSearch()"
-        />
-      </div>
+        <div class="row" style="margin-top:10px">
+          <!-- 舊圖會存在 -->
+          <modal-photo 
+            ref="modalPhoto" 
+            :label="label" 
+          />	
+          
+          <div class="col" style="margin-left:22px">
+            <q-btn
+              label="組成食材"
+              icon="library_add"
+              outline
+              :color="containError ? 'negative' : 'primary'"
+              type="submit"
+              @click="showDishFood=true, setSearchType(''), clearSearch()"
+            />
+
+            <modal-dish-person 
+              :person.sync="dishToSubmit.person"
+            />
+          </div>
+        </div>
 
       <q-dialog v-model="showDishFood" :cancel="true" :persistent="true">
         <modal-dish-food 
@@ -46,32 +57,22 @@
           @showDishFood="showDishFood=false"
           @close="containToSubmit? setSearchType('dishAdd'):'' "
         />
-      </q-dialog>
-      
-      <div class="q-pt-md">
-        <!-- 舊圖會存在 -->
-        <modal-photo 
-          style="width:310px"
-          ref="modalPhoto" 
-          :label="label" 
-        />	
-      </div>
+      </q-dialog>   
+    </q-card-section>
+
+    <q-card-section style="margin-left:44px;margin-top:30px">
+      <modal-dish-restaurant 
+        :restaurant_id.sync="dishToSubmit.restaurant_id"
+        @newRestaurant="newRestaurant=true"
+        ref="modalDishRestaurant" />
     </q-card-section>
 
     <q-card-section>
       <modal-dish-recipe 
-        style="padding-left: 100px"
         ref="modalDishRecipe"
         :recipe.sync="recipeToSubmit.text"
       />
     </q-card-section>
-
-      <q-card-section class="q-pl-md" style="padding-left: 133px">
-        <modal-dish-restaurant 
-          :restaurant_id.sync="dishToSubmit.restaurant_id"
-          @newRestaurant="newRestaurant=true"
-          ref="modalDishRestaurant" />
-      </q-card-section>
 
     <div class="col q-pa-md" >
       <food-table
@@ -124,7 +125,7 @@ export default {
       //  將營養素總和放入dish的營養素
       this.foodList = getFood(this.containToSubmit, this.food)
       Object.keys(this.dishToSubmit).forEach(key => {
-        if (key != 'name' && key != 'restaurant_id' && key != 'dish_photo' && key != 'id') {
+        if (key != 'name' && key != 'restaurant_id' && key != 'dish_photo' && key != 'id' && key != 'number' && key != 'person') {
           this.dishToSubmit[key] = this.foodList[this.foodList.length-1][key]
         }
       })

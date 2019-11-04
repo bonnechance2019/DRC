@@ -14,23 +14,34 @@
       />
     </q-card-section>
 
-    <q-card-section class="row" style="padding-left: 130px">
-      <div class="q-pt-md">
-        <modal-dish-name 
-          :name.sync="dishToSubmit.name"
-          ref="modalDishName" />
+    <q-card-section class="row" style="padding-left:60px">
+      <modal-dish-name 
+        :name.sync="dishToSubmit.name"
+        ref="modalDishName" />
 
-        <q-btn
-          label="組成食材"
-          icon="library_add"
-          outline
-          :color="containError ? 'negative' : 'primary'"
-          type="submit"
-          size="16px"
-          @click="showDishFood=true, setSearchType('')"
+      <div class="row" style="margin-top:10px">
+        <modal-photo 
+          ref="modalPhoto"
+          :label="label"
         />
-      </div>
 
+        <div class="col" style="margin-left:22px">
+          <q-btn
+            label="組成食材"
+            icon="library_add"
+            outline
+            :color="containError ? 'negative' : 'primary'"
+            style="height:50px"
+            type="submit"
+            @click="showDishFood=true, setSearchType('')"
+          />
+
+          <modal-dish-person 
+            :person.sync="dishToSubmit.person"
+          />
+        </div>
+      </div>
+      
       <q-dialog v-model="showDishFood" :cancel="true" :persistent="true">
         <modal-dish-food 
           :containToSubmit="containToSubmit"
@@ -39,29 +50,20 @@
           @close="containToSubmit? setSearchType('dishAdd'):'' "
         />
       </q-dialog>
-      
-      <modal-photo 
-        class="q-pt-md"
-        style="width:310px"
-        ref="modalPhoto"
-        :label="label"
-      />	
+    </q-card-section>
+
+    <q-card-section style="margin-left:44px;margin-top:30px">
+      <modal-dish-restaurant 
+        :restaurant_id.sync="dishToSubmit.restaurant_id"
+        @newRestaurant="newRestaurant=true"
+        ref="modalDishRestaurant" />
     </q-card-section>
 
     <q-card-section>
       <modal-dish-recipe 
-        style="padding-left: 100px"
         ref="modalDishRecipe"
         :recipe.sync="recipeToSubmit.text"/>	
     </q-card-section>
-
-      <q-card-section class="q-pl-md" style="padding-left: 133px">
-        <modal-dish-restaurant 
-          style="max-width: 300px;"
-          :restaurant_id.sync="dishToSubmit.restaurant_id"
-          @newRestaurant="newRestaurant=true"
-          ref="modalDishRestaurant" />
-      </q-card-section>
 
     <div class="col q-pa-md" >
       <food-table
@@ -73,6 +75,8 @@
     <form @submit.prevent="submitForm"> 
       <modal-buttons :label="label.save" />
     </form>
+
+    <!-- <pre class="text-black">{{dishToSubmit.person}}</pre> -->
   </q-card>
     
 </template>
@@ -97,6 +101,8 @@ export default {
       containError: false,
       dishToSubmit: {
         name:'',
+        person: '',
+        number: '',
         restaurant_id: '',
         dish_photo: '',
         calories: '',
@@ -155,27 +161,33 @@ export default {
 	methods: {
     ...mapActions('index', ['clear', 'addDish', 'addContain', 'addRecipe', 'setSearchType', 'setSearch', 'addRestaurant']),
 		submitDish() {
+      //  將營養素總和放入dish的營養素
       this.foodList = getFood(this.containToSubmit, this.food)
       Object.keys(this.dishToSubmit).forEach(key => {
-        if (key != 'name' && key != 'restaurant_id' && key != 'dish_photo' && key != 'id') {
+        if (key != 'name' && key != 'restaurant_id' && key != 'dish_photo' && key != 'id' && key != 'number' && key != 'person') {
           this.dishToSubmit[key] = this.foodList[this.foodList.length-1][key]
         }
       })
 
+      //  儲存照片網址（沒有則存‘無’）
       this.dishToSubmit.dish_photo = this.dish_photo
       this.recipeToSubmit.photo = this.recipe_photo
 
+      //  新增dish
       this.addDish(this.dishToSubmit)
 
+      //  如果餐廳是新的則新增餐廳
       if (this.newRestaurant) {
         this.addRestaurant(this.dishToSubmit.restaurant_id)
       }
 
+      //  新增包含dish的contain
       for (let i = 0; i < this.containToSubmit.length; i++) {
         this.containToSubmit[i].dish = this.dish_id
       }
       this.addContain(this.containToSubmit)
 
+      //  如果有食譜則新增食譜
       if (this.recipeToSubmit.text) {
         this.recipeToSubmit.dish = this.dish_id
         this.addRecipe(this.recipeToSubmit)

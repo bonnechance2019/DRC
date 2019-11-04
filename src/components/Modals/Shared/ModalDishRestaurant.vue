@@ -1,5 +1,5 @@
 <template>
-  <q-card  class="col q-pt-md" style="width: 300px">
+  <q-card  class="col q-pt-md" style="width:445px">
     <div class="q-pt-md">
       <q-btn-toggle
         v-model="type"
@@ -20,7 +20,6 @@
       :rules="[val => !!val || 'Field is required']" 
       ref="restaurant_id"
       label="餐廳" 
-      style="width: 300px"
       >
       <template v-slot:append>
         <q-icon 
@@ -44,7 +43,6 @@
       input-debounce="0"
       :options="options"
       @filter="filterRestaurant"
-      style="width: 300px"
     >
       <template v-slot:append>
         <q-icon 

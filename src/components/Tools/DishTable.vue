@@ -12,7 +12,8 @@
     > 
       <template v-slot:top="props">
         <q-th class="row">
-          <div style="font-size:22px">
+          <div style="font-size:22px" class="text-blue-10">
+          <q-icon name="restaurant" size="25px" />
             料理
           </div>
 
@@ -35,12 +36,10 @@
         <q-td key="name" :props="props" class="dish-name">
           <q-btn 
             flat 
-            @click="
-            showEditDish=true,
-            selected=[], 
-            $emit('false'),
-            setSelect(props.row.id)
-          ">
+            @click="showEditDish=true,
+              selected=[], 
+              $emit('false'),
+              setSelect(props.row.id)">
             {{ props.row.name }}
           </q-btn>
         </q-td>
@@ -145,8 +144,8 @@
       </template>
     </q-table>
 
-    <q-dialog v-model="showEditDish">
-      <edit-dish :dish="dish" @close="showEditDish=false" />
+    <q-dialog v-model="showEditDish" :cancel="true" :persistent="true">
+      <edit-dish :dish="dish" @close="setSelect(''), showEditDish=false" />
     </q-dialog>
   </div>
 </template>

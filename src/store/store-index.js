@@ -15,7 +15,9 @@ const state = {
           format: val => `${val}`,
           sortable: true
         },
+        { name: 'person', label: '人份', field: 'person' },
         { name: 'restaurant_id', align: 'left', label: '餐廳', field: 'restaurant_id' },
+        { name: 'number', align: 'right', label: '編號', field: 'number' },
         { name: 'dish_photo', align: 'center', label: '照片', field: 'dish_photo' },
         
         { name: 'grains', label: '全穀雜糧類', field: 'grains' },
@@ -109,11 +111,93 @@ const state = {
         { name: 'fatty_acidP', label: '脂肪酸P (mg)', field: 'fatty_acidP', sortable: true },
         { name: 'cholesterol', label: '膽固醇 (mg)', field: 'cholesterol', sortable: true },
     ],
+    nutrient: {
+        calories: 'calories',
+        fat: 'fat',
+        protein: 'protein',
+        carbs: 'carbs',
+        // grains: 'grains',
+        // fruits: 'fruits',
+        // vegetables: 'vegetables',
+        // oils: 'oils',
+        // dairy_all: 'dairy_all',
+        // dairy_low: 'dairy_low',
+        // dairy_de: 'dairy_de', 
+        // meat_low: 'meat_low',
+        // meat_med: 'meat_med',
+        // meat_high: 'meat_high',
+        // meat_max: 'meat_max',
+        dietary_fiber: 'dietary_fiber',
+        total_sugar: 'total_sugar',
+        sodium: 'sodium',
+        potassium: 'potassium',
+        calcium: 'calcium',
+        magnesium: 'magnesium',
+        iron: 'iron',
+        zinc: 'zinc',
+        phosphorus: 'phosphorus',
+        vitaminA: 'vitaminA',
+        vision_alcohol: 'vision_alcohol',
+        vitaminE: 'vitaminE',
+        vitaminB1: 'vitaminB1',
+        vitaminB2: 'vitaminB2',
+        vitaminB6: 'vitaminB6',
+        vitaminB12: 'vitaminB12',
+        vitaminC: 'vitaminC',
+        nicotin: 'nicotin',
+        folic_acid: 'folic_acid',
+        fatty_acidS: 'fatty_acidS',
+        fatty_acidM: 'fatty_acidM',
+        fatty_acidP: 'fatty_acidP',
+        cholesterol: 'cholesterol'
+    }, // 不包含六大類的27項
+    nutrientChinese:{
+        calories: '熱量(kcal)',
+        fat: '脂肪(g)',
+        protein: '蛋白質(g)',
+        carbs: '糖類(g)',
+        // grains: '全穀雜糧類',
+        // fruits: '水果類',
+        // vegetables: '蔬菜類',
+        // oils: '油脂與堅果類',
+        // dairy_all: '乳品類(全脂)',
+        // dairy_low: '乳品類(低脂)',
+        // dairy_de: '乳品類(脫脂)', 
+        // meat_low: '蛋、豆、魚、肉類(低脂)',
+        // meat_med: '蛋、豆、魚、肉類(中脂)',
+        // meat_high: '蛋、豆、魚、肉類(高脂)',
+        // meat_max: '蛋、豆、魚、肉類(超高脂)',
+        dietary_fiber: '膳食纖維(g)',
+        total_sugar: '糖值總量(g)',
+        sodium: '鈉(mg)',
+        potassium: '鉀(mg)',
+        calcium: '鈣(mg)',
+        magnesium: '鎂(mg)',
+        iron: '鐵(mg)',
+        zinc: '鋅(mg)',
+        phosphorus: '磷(mg)',
+        vitaminA: '維生素Ａ(IU)',
+        vision_alcohol: '視網醇(ug)',
+        vitaminE: 'a-維生素E(mg)',
+        vitaminB1: '維生素B1(mg)',
+        vitaminB2: '維生素B2(mg)',
+        vitaminB6: '維生素B6(mg)',
+        vitaminB12: '維生素B12(mg)',
+        vitaminC: '維生素C(mg)',
+        nicotin: '菸鹼素(mg)',
+        folic_acid: '葉酸(ug)',
+        fatty_acidS: '脂肪酸S(mg)',
+        fatty_acidM: '脂肪酸M(mg)',
+        fatty_acidP: '脂肪酸P(mg)',
+        cholesterol: '膽固醇(mg)'
+    }, // 不包含六大類的27項中文
 
     dish: [
         // {
         //     id: '1',
         //     name: '水餃',
+        //     number: '',
+        //     person: '',
         //     restaurant_id: '飯店',
         //     dish_photo: 'https://i.imgur.com/GzaDoDhb.jpg',
         //     calories: 125,
@@ -375,6 +459,9 @@ const actions = {
     updateSix({dispatch}, payload) {
         dispatch('fbUpdateSix', payload)
     },
+    updateNutrient({dispatch}, payload) {
+        dispatch('fbUpdateNutrient', payload)
+    },
     updateDish({dispatch}, payload) {
         dispatch('fbUpdateDish', payload)
     },
@@ -386,7 +473,7 @@ const actions = {
         dispatch('fbDeleteContain', id)
     },
 
-    fbReadData({ commit }) {
+    fbReadData({commit}) {
         // let userId = firebaseAuth.currentUser.uid
         let db = firebase.firestore()
         
@@ -404,6 +491,13 @@ const actions = {
                     commit('addFood', change.doc.data())
                 }
                 if (change.type === "modified") {
+                    Notify.create({
+                        color: 'blue-10',
+                        icon: 'done',
+                        message:'食材更新成功！',
+                        position: 'top',
+                        timeout: 500
+                    })
                     commit('updateFood', change.doc.data())
                 }
                 // if (change.type === "removed") {
@@ -414,9 +508,23 @@ const actions = {
         db.collection("dishs").onSnapshot(function(snapshot) {
             snapshot.docChanges().forEach(change => {
                 if (change.type === "added") {
+                    Notify.create({
+                        color: 'blue-10',
+                        icon: 'done',
+                        message:'料理新增成功！',
+                        position: 'top',
+                        timeout: 500
+                    })
                     commit('addDish', change.doc.data())
                 }
                 if (change.type === "modified") {
+                    Notify.create({
+                        color: 'blue-10',
+                        icon: 'done',
+                        message:'料理更新成功！',
+                        position: 'top',
+                        timeout: 500
+                    })
                     commit('updateDish', change.doc.data())
                 }
                 // if (change.type === "removed") {
@@ -518,6 +626,17 @@ const actions = {
                         meat_high: payload.meat_high,
                         meat_max: payload.meat_max
                     })
+                }
+            })
+        })
+    },
+    fbUpdateNutrient({}, payload) {
+        let foodRef = firebase.firestore().collection("foods")
+
+        foodRef.get().then(snapshot => {
+            snapshot.forEach((doc) => {
+                if (doc.data().id == payload.id) {
+                    foodRef.doc(doc.id).update(payload)
                 }
             })
         })

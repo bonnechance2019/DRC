@@ -9,7 +9,7 @@
       v-select-all
       ref="name"
       label="料理"
-      style="width: 300px" 
+      style="width:450px" 
       >
       <template v-slot:append>
         <q-icon 
