@@ -1,5 +1,5 @@
 {
-  "name": "front",
+  "name": "drc",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
   "productName": "DRC APP",
@@ -9,9 +9,14 @@
   "scripts": {
     "test": "echo \"No test specified\" && exit 0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bonnechance2019/DRC"
+  },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "firebase": "^7.2.0",
+    "firestore-export-import": "^0.2.9",
     "quasar": "^1.0.0",
     "vue-i18n": "^8.15.0"
   },
@@ -25,5 +30,7 @@
   },
   "browserslist": [
     "last 1 version, not dead, ie >= 11"
-  ]
+  ],
+  "main": ".postcssrc.js",
+  "license": "ISC"
 }

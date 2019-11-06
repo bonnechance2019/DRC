@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh Lpr fFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -34,23 +34,10 @@
       </q-toolbar>
     </q-header>
 
-    <q-footer class="bg-grey-2">
-      <q-tabs>
-        <q-route-tab
-          class="text-grey-7"
-          v-for="nav in navs"
-          :key="nav.label"
-          :to="nav.to"
-          :icon="nav.icon"
-          :label="nav.label"
-        />
-      </q-tabs>
-    </q-footer>
-
     <q-drawer
       v-model="leftDrawerOpen"
       bordered
-      :breakpoint="768"
+      :breakpoint="767"
       :width="250"
       content-class="bg-grey-2"
     >
