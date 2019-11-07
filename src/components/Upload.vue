@@ -1,7 +1,6 @@
 <script>
 import { QUploaderBase, SessionStorage } from 'quasar';
 import firebase from 'firebase/app';
-import 'firebase/storage'; // storage功能
 import uuid from 'uuid/v4';
 import { mapActions } from 'vuex';
 

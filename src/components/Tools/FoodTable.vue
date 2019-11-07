@@ -6,6 +6,7 @@
       :columns="food_nutrient"
       row-key="id"
       class="sticky-header-column-table"
+      :pagination.sync="pagination"
     >
       <template v-slot:top="props">
         <q-th class="row">
@@ -132,7 +133,11 @@ export default {
     return {
       foodList: [],
       showEditFood: false,
-      foodToEdit: ''
+      foodToEdit: '',
+      pagination: {
+        sortBy: 'name',
+        rowsPerPage: 20,
+      }
     }
   },
   computed: {
@@ -154,7 +159,6 @@ export default {
         this.foodList = getFood(this.containToSubmit, this.food)
       }
     }
-    
   },
 }
 </script>
@@ -174,7 +178,7 @@ export default {
       z-index: 2 /* higher than z-index for td below */
       color: $indigo-8
       // font-size: 14px
-      // background: white /* bg color is important; just specify one */
+      background: white /* bg color is important; just specify one */
 
     tr:first-child th:first-child
       z-index: 3 /* highest z-index */

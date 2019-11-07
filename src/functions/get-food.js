@@ -1,3 +1,5 @@
+import NP from 'number-precision'
+
 export function getFood(value, food) {
     let Food = [],
         totalNutrient = {   // 總和的欄位
@@ -51,54 +53,20 @@ export function getFood(value, food) {
                         temp[key] = food[j][key]    // 過濾不依賴份量的key
                     }
                     else {
-                        temp[key] = food[j][key]*value[i].quantity  // 將營養素＊份量
+                        temp[key] = NP.times(food[j][key], value[i].quantity)  // 將營養素＊份量
                     }
                 })
                 Food.push(temp)
                 j = food.length  
             }
         }
-    }
+    } 
     for (let i = 0; i < Food.length; i++) { // 將營養素的值加入總和
-        totalNutrient.quantity += Food[i].quantity
-        totalNutrient.calories += Food[i].calories
-        totalNutrient.fat += Food[i].fat
-        totalNutrient.protein += Food[i].protein
-        totalNutrient.carbs += Food[i].carbs
-        totalNutrient.grains += Food[i].grains
-        totalNutrient.fruits += Food[i].fruits
-        totalNutrient.vegetables += Food[i].vegetables
-        totalNutrient.oils += Food[i].oils
-        totalNutrient.dairy_all += Food[i].dairy_all
-        totalNutrient.dairy_low += Food[i].dairy_low
-        totalNutrient.dairy_de += Food[i].dairy_de
-        totalNutrient.meat_low += Food[i].meat_low
-        totalNutrient.meat_med += Food[i].meat_med
-        totalNutrient.meat_high += Food[i].meat_high
-        totalNutrient.meat_max += Food[i].meat_max
-        totalNutrient.dietary_fiber += Food[i].dietary_fiber
-        totalNutrient.total_sugar += Food[i].total_sugar
-        totalNutrient.sodium += Food[i].sodium
-        totalNutrient.potassium += Food[i].potassium
-        totalNutrient.calcium += Food[i].calcium
-        totalNutrient.magnesium += Food[i].magnesium
-        totalNutrient.iron += Food[i].iron
-        totalNutrient.zinc += Food[i].zinc
-        totalNutrient.phosphorus += Food[i].phosphorus
-        totalNutrient.vitaminA += Food[i].vitaminA
-        totalNutrient.vision_alcohol += Food[i].vision_alcohol
-        totalNutrient.vitaminE += Food[i].vitaminE
-        totalNutrient.vitaminB1 += Food[i].vitaminB1
-        totalNutrient.vitaminB2 += Food[i].vitaminB2
-        totalNutrient.vitaminB6 += Food[i].vitaminB6
-        totalNutrient.vitaminB12 += Food[i].vitaminB12
-        totalNutrient.vitaminC += Food[i].vitaminC
-        totalNutrient.nicotin += Food[i].nicotin
-        totalNutrient.folic_acid += Food[i].folic_acid
-        totalNutrient.fatty_acidS += Food[i].fatty_acidS
-        totalNutrient.fatty_acidM += Food[i].fatty_acidM
-        totalNutrient.fatty_acidP += Food[i].fatty_acidP
-        totalNutrient.cholesterol += Food[i].cholesterol
+        Object.keys(totalNutrient).forEach(key => {
+            if (key != 'name') {
+                totalNutrient[key] = NP.plus(Food[i][key], totalNutrient[key])
+            }
+        })
     }
     Food.push(totalNutrient)
     return Food

@@ -3,6 +3,9 @@
 .thumbs.db
 node_modules
 dist/
+firebase.conf.js
+import.js
+serviceAccount.json
 
 /src-cordova/node_modules
 /src-cordova/platforms

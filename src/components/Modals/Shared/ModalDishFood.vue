@@ -101,6 +101,7 @@ export default {
         }
         this.newFood = true
       }
+  
       this.clearSearch()
       this.setSearchType('dishAdd')
       this.$emit('showDishFood')

@@ -6,6 +6,7 @@ import Firebase from 'firebase/app'
 // Add the Firebase products that you want to use
 import "firebase/auth" // auth功能
 import 'firebase/firestore' // firestore功能
+import 'firebase/storage' // storage的功能
 import firebaseConfig from '../../firebase.conf'
 
 // Your web app's Firebase configuration

@@ -8,7 +8,7 @@
       autofocus
       v-select-all
       ref="name"
-      label="料理"
+      label="料理名稱"
       style="width:450px" 
       >
       <template v-slot:append>

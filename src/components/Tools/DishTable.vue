@@ -9,6 +9,7 @@
       :selected.sync="selected"
       @selection="selectDish" 
       class="dish-table" 
+      :pagination.sync="pagination"
     > 
       <template v-slot:top="props">
         <q-th class="row">
@@ -160,6 +161,10 @@ export default {
       selected: [],
       showImg: false,
       showEditDish: false,
+      pagination: {
+        sortBy: 'name',
+        rowsPerPage: 20,
+      }
     }
   },
   computed: {

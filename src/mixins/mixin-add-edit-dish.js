@@ -3,12 +3,14 @@ export default {
         submitForm() {
             this.$refs.modalDishName.$refs.name.validate()
             this.$refs.modalDishRestaurant.$refs.restaurant_id.validate()
+            this.$refs.modalDishPerson.$refs.person.validate()
             if (!this.containToSubmit.length) {
                 this.containError = true
             }
             else {
                 if (!this.$refs.modalDishName.$refs.name.hasError 
-                    && !this.$refs.modalDishRestaurant.$refs.restaurant_id.hasError) {
+                    && !this.$refs.modalDishRestaurant.$refs.restaurant_id.hasError
+                    && !this.$refs.modalDishPerson.$refs.person.hasError) {
                         this.submitDish()
                 }
             }

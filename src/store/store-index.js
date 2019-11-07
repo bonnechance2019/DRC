@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { uid, Notify } from 'quasar'
+import { uid, Notify, Loading } from 'quasar'
 import firebase from 'firebase/app'
 import { getFood } from '../functions/get-food'
 import { showError } from 'src/functions/show-error'
@@ -456,9 +456,11 @@ const actions = {
     },
     addDownloadURL({commit}, photo) {
         if (photo.type == 'dishs') {
+            console.log('Photo of dish:', photo.url)
             commit('addDishPhoto', photo.url)
         }
         else if (photo.type == 'recipes') {
+            console.log('Photo of recipe:', photo.url)
             commit('addRecipePhoto', photo.url)
         }
     },
@@ -479,6 +481,9 @@ const actions = {
     deleteContain({dispatch}, id) {
         dispatch('fbDeleteContain', id)
     },
+    deletePhoto({dispatch}, url) {
+        dispatch('fbDeletePhoto', url)
+    },
 
     fbReadData({commit}) {
         // let userId = firebaseAuth.currentUser.uid
@@ -490,7 +495,7 @@ const actions = {
         //         commit('addFood', doc.data())
         //     })
         // })
-        
+
         // listen realtime update and handle data
         db.collection("foods").onSnapshot(function(snapshot) {
             snapshot.docChanges().forEach(change => {
@@ -569,10 +574,16 @@ const actions = {
         let restaurantRef = firebase.firestore().collection("restaurants")
         restaurantRef.add(payload)
         .then(function() {
-            // Notify.create('添加成功！')
+            Notify.create({
+                color: 'cyan-8',
+                icon: 'done',
+                message:'餐廳新增成功！',
+                position: 'top',
+                timeout: 500
+            })
         })
         .catch(function(error) {
-            console.error("Error adding restaurant: ", error);
+            showError(error.message)
         });
     },
     fbAddRecipe({}, payload) {
@@ -580,10 +591,16 @@ const actions = {
         let recipeRef = firebase.firestore().collection("recipes")
         recipeRef.add(payload)
         .then(function() {
-            // Notify.create('添加成功！')
+            Notify.create({
+                color: 'teal-7',
+                icon: 'done',
+                message:'食譜新增成功！',
+                position: 'top',
+                timeout: 500
+            })
         })
         .catch(function(error) {
-            console.error("Error adding recipe: ", error);
+            showError(error.message)
         });
     },
     fbAddContain({}, payload) {
@@ -594,7 +611,7 @@ const actions = {
             // Notify.create('添加成功！')
         })
         .catch(function(error) {
-            console.error("Error adding document: ", error);
+            showError(error.message)
         });
     },
 
@@ -618,6 +635,18 @@ const actions = {
                         meat_high: payload.meat_high,
                         meat_max: payload.meat_max
                     })
+                    .then(() => {
+                        Notify.create({
+                            color: 'orange-6',
+                            icon: 'done',
+                            message:'六大類修改成功！',
+                            position: 'bottom',
+                            timeout: 500
+                        })
+                    })
+                    .catch((error) => {
+                        showError(error.message)
+                    })
                 }
             })
         })
@@ -629,6 +658,18 @@ const actions = {
             snapshot.forEach((doc) => {
                 if (doc.data().id == payload.id) {
                     foodRef.doc(doc.id).update(payload)
+                    .then(() => {
+                        Notify.create({
+                            color: 'orange-6',
+                            icon: 'done',
+                            message:'營養素修改成功！',
+                            position: 'bottom',
+                            timeout: 500
+                        })
+                    })
+                    .catch((error) => {
+                        showError(error.message)
+                    })
                 }
             })
         })
@@ -641,6 +682,18 @@ const actions = {
             snapshot.forEach((doc) => {
                 if (doc.data().id == payload.id) {
                     dishRef.doc(doc.id).update(payload)
+                    .then(() => {
+                        Notify.create({
+                            color: 'blue-10',
+                            icon: 'done',
+                            message:'料理修改成功！',
+                            position: 'bottom',
+                            timeout: 500
+                        })
+                    })
+                    .catch((error) => {
+                        showError(error.message)
+                    })
                 }
             })
         })
@@ -652,6 +705,9 @@ const actions = {
             snapshot.forEach((doc) => {
                 if (doc.data().id == payload.id) {
                     recipeRef.doc(doc.id).update(payload)
+                    .catch((error) => {
+                        showError(error.message)
+                    })
                 }
             })
         })
@@ -667,6 +723,9 @@ const actions = {
                 }
             })
         })
+    },
+    fbDeletePhoto({}, url) {
+        firebase.storage().refFromURL(url).delete()
     }
 }
 
@@ -754,9 +813,9 @@ export default {
 }
 
 // {
+    //     restaurant_id: payload.restaurant_id,
+    //     dish_photo: payload.dish_photo,
 //     name: payload.name,
-//     restaurant_id: payload.restaurant_id,
-//     dish_photo: payload.dish_photo,
 //     calories: payload.calories,
 //     fat: payload.fat,
 //     protein: payload.protein,

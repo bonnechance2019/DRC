@@ -4,6 +4,11 @@
     style="background: #F8F8FF"  
   >
     <q-card-section class="text-right">
+      <span 
+        class="text-primary" 
+        style="padding-right:70px"
+      >新增料理（照片選取好後，記得先點擊上傳）。</span>
+
       <q-btn 
         flat
         dense 
@@ -37,6 +42,7 @@
           />
 
           <modal-dish-person 
+            ref="modalDishPerson"
             :person.sync="dishToSubmit.person"
           />
         </div>
@@ -151,7 +157,11 @@ export default {
         photo: '',
         text: '',
       },
-      foodList: []
+      foodList: [],
+      track: {
+        whom: '',
+        what: ''
+      }
     }
   },
   computed: {
@@ -160,6 +170,7 @@ export default {
   },
 	methods: {
     ...mapActions('index', ['clear', 'addDish', 'addContain', 'addRecipe', 'setSearchType', 'setSearch', 'addRestaurant']),
+    ...mapActions('track', ['addTrack']),
 		submitDish() {
       //  將營養素總和放入dish的營養素
       this.foodList = getFood(this.containToSubmit, this.food)
@@ -192,6 +203,10 @@ export default {
         this.recipeToSubmit.dish = this.dish_id
         this.addRecipe(this.recipeToSubmit)
       }
+
+      this.track.whom = this.dishToSubmit.name
+      this.track.what = 'add_dish'
+      this.addTrack(this.track)
 
       this.clear()
       this.setSearchType('dish')

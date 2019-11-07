@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 // import example from './module-example'
 import index from './store-index'
 import auth from './store-auth'
+import track from './store-track'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,8 @@ export default function (/* { ssrContext } */) {
     modules: {
       // example
       index,
-      auth
+      auth,
+      track
     },
 
     // enable strict mode (adds overhead!)

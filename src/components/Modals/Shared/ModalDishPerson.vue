@@ -5,6 +5,7 @@
     type='number'
     @input="$emit('update:person', $event)"
     :rules="[val => !!val || 'required']" 
+    ref="person"
     label="人份"
     style="width:125px"
     class="q-pt-md"

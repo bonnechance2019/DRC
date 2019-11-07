@@ -1,45 +1,51 @@
 <template>
   <q-page 
     class="q-pa-md absolute full-width column"
-    :style="searchDish? 
+    :style="searchType=='dish'? 
     `background: #e6f9ff`:'background: #e6ffe6'"
   >
-    <div class="q-pa-md row">
-      <q-btn  
-        @click="clear(), showAddDish=true"
-        outline
-        class="all-pointer-events bg-blue-4" 
-        icon="add"
-      />
 
-      <div style="padding-left:40px;padding-top:5px">
-        <q-btn
-          :disable="searchType=='dish'" 
-          color="blue-6"   
-          @click="setSearchType('dish'), searchDish=true" 
-          label="料理" 
-          icon="restaurant"
-        />
+  <q-btn @click="fbReadData()"/>
+    
+  <div class="q-pa-md row">
+    <q-btn  
+      @click="clear(), showAddDish=true"
+      outline
+      label="新增料理"
+      class="all-pointer-events bg-blue-4"
+      icon="add"
+    />
 
-        <q-btn 
-          :disable="searchType=='food' || showFood" 
-          color="blue-6" 
-          @click="setSearchType('food'), searchDish=false" 
-          label="食材" 
-          icon="local_pizza"
-        />
-      </div>
+    <div style="padding-left:40px">
+      <q-tooltip anchor="top middle" self="bottom middle">搜尋類型</q-tooltip>
+
+      <q-btn-toggle 
+        v-show="!showFood"
+        v-model="type"
+        spread
+        no-caps 
+        toggle-color="blue-6"
+        text-color="black"
+        color="grey-2"
+        :options="[
+          {label: '料理', value: 'dish', icon: 'restaurant', slot: 'dish'},
+          {label: '食材', value: 'food', icon: 'local_pizza', slot: 'food'}
+        ]" 
+      >
+      </q-btn-toggle>
     </div>
+  </div>
 
     <div class="q-pl-md row">
       <search 
         v-show="!showFood"
-        style="max-width: 300px"
+        style="max-width: 380px"
       />
 
       <div 
         v-show="searchType=='dish' && showFood" 
-        class="q-pa-md row; text-amber-10"
+        class="q-pa-md text-amber-10"
+        style="padding:17px"
       >
         如果要查詢其他項目，須先取消勾選
       </div>
@@ -78,12 +84,19 @@ export default {
     return {
       showFood: false,
       showRecipe: false,
-      searchDish: true,
       showAddDish: false
     }
   },
   computed: {
-    ...mapState('index', ['searchType', 'search'])
+    ...mapState('index', ['searchType', 'search']),
+    type: {
+      get() {
+        return this.searchType
+      },
+      set(value) {
+        this.setSearchType(value)
+      }
+    }
   },
   methods: {
     ...mapActions('index', ['setSearchType', 'clearSearch', 'fbReadData', 'clear'])

@@ -86,6 +86,11 @@ export default {
           label: '設定',
           icon: 'settings',
           to: '/settings'
+        },
+        {
+          label: '紀錄',
+          icon: 'recent_actors',
+          to: '/tracks'
         }
       ]
     }

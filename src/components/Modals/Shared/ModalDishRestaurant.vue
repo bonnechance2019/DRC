@@ -1,6 +1,6 @@
 <template>
   <q-card  class="col q-pt-md" style="width:445px">
-    <div class="q-pt-md">
+    <div class="q-pt-md row">
       <q-btn-toggle
         v-model="type"
         toggle-color="primary"
@@ -10,6 +10,9 @@
           {value: 'search', icon: 'search'},
         ]"
       />
+      <span class="q-pa-sm text-blue-10">
+        新增或搜尋已有餐廳
+      </span>
     </div>
     
     <q-input

@@ -45,6 +45,7 @@
             />
 
             <modal-dish-person 
+              ref="modalDishPerson"
               :person.sync="dishToSubmit.person"
             />
           </div>
@@ -112,7 +113,11 @@ export default {
       dishToSubmit: {},
       containToSubmit: [],
       recipeToSubmit: '',
-      foodList: []
+      foodList: [],
+      track: {
+        whom: '',
+        what: ''
+      }
     }
   },
   computed: {
@@ -120,7 +125,8 @@ export default {
     ...mapGetters('index', ['recipe', 'food', 'contain'])
   },
   methods: {
-    ...mapActions('index', ['clear', 'setSearch', 'setSearchType', 'setSelect', 'clearSearch', 'updateDish', 'deleteContain', 'addRecipe', 'updateRecipe', 'addRestaurant', 'addContain']),
+    ...mapActions('index', ['clear', 'setSearch', 'setSearchType', 'setSelect', 'clearSearch', 'updateDish', 'deleteContain', 'deletePhoto', 'addRecipe', 'updateRecipe', 'addRestaurant', 'addContain']),
+    ...mapActions('track', ['addTrack']),
     submitDish() {
       //  將營養素總和放入dish的營養素
       this.foodList = getFood(this.containToSubmit, this.food)
@@ -132,9 +138,15 @@ export default {
 
       //  如有新增照片則更改網址
       if (this.dish_photo != '無') {
+        if (this.dishToSubmit.dish_photo != '無') {
+          this.deletePhoto(this.dishToSubmit.dish_photo)
+        }
         this.dishToSubmit.dish_photo = this.dish_photo
       }
       if (this.recipe_photo != '無') {
+        if (this.recipeToSubmit.photo != '無') {
+          this.deletePhoto(this.recipeToSubmit.photo)
+        }
         this.recipeToSubmit.photo = this.recipe_photo
       }
 
@@ -163,6 +175,10 @@ export default {
           this.addRecipe(this.recipeToSubmit)
         }
       }
+
+      this.track.whom = this.dishToSubmit.name
+      this.track.what = 'edit_dish'
+      this.addTrack(this.track)
 
       this.clear()
       this.setSearchType('dish')
